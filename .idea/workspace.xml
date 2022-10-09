@@ -5,22 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7e1d569-67fd-410e-ad49-dc404dbe123f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/csv-plugin.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/config/ConfigTTP.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/config/IConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logs/CsvRecord.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logs/Logger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/support/Utils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/ttp/ItemTTP.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/ttp/NodeTTP.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/WorkFlow.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/config/ConfigEA.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/loader/LoaderTTP.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logs/Analysis.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logs/ICsvRecord.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/model/DataTTP.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/model/ISpecimen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/model/NodeTTP.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/model/Specimen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/support/Evaluator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/csv-plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv-plugin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/config/ConfigTTP.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/config/IConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logs/CsvRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logs/CsvRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logs/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logs/Logger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/support/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/support/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ttp/ItemTTP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/model/ItemTTP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ttp/NodeTTP.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,19 +53,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/domst/IdeaProjects/metaheuristics/src/main/java/org/example/input",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "spring.configuration.checksum": "9a1ce2c0635629135dae4049dfa8a53f"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Projekty/Pwr/Metaheurystyki/src/main/resources/input&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;9a1ce2c0635629135dae4049dfa8a53f&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Projekty\Pwr\Metaheurystyki\src\main\resources\input" />
       <recent name="$PROJECT_DIR$/src/main/java/org/example/input" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -72,7 +82,7 @@
       <module name="metaheuristics" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.example.*" />
+          <option name="PATTERN" value="org.example.implementLater.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -96,6 +106,9 @@
       <updated>1665051174955</updated>
       <workItem from="1665051176669" duration="8773000" />
       <workItem from="1665066244859" duration="3988000" />
+      <workItem from="1665158138157" duration="24338000" />
+      <workItem from="1665343490351" duration="5132000" />
+      <workItem from="1665348636279" duration="715000" />
     </task>
     <servers />
   </component>

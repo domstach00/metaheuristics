@@ -4,6 +4,7 @@ import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import org.example.support.Utils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,18 +12,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Logger {
-    private static String logDirectory = "src/main/resources/logs";
-    private static String fileName = "logger.csv";
+    private static String logDirectory = Utils.getLogsPath;
 
-    public static void log(CsvRecord csvRecord) {
-        String fullPath = logDirectory + "/" + fileName;
+    public static void logger(CsvRecord csvRecord) {
+        String fullPath = logDirectory + "/" + csvRecord.getFileName();
         File file = new File(fullPath);
 
         boolean addHeader = !file.exists();
 
         try (var writer = new BufferedWriter(new FileWriter(file, true))) {
             if (addHeader)
-                writer.write(CsvRecord.getHeader());
+                writer.write(csvRecord.getHeader());
 
             StatefulBeanToCsv<CsvRecord> csv = new StatefulBeanToCsvBuilder<CsvRecord>(writer)
                     .withApplyQuotesToAll(false)
@@ -34,4 +34,18 @@ public class Logger {
         }
     }
 
+    public static void log(ICsvRecord iCsvRecord) {
+        File file = new File(logDirectory + "/" + iCsvRecord.getFileName());
+
+        boolean addHeader = !file.exists();
+
+        try (var writer = new BufferedWriter(new FileWriter(file, true))) {
+            if (addHeader)
+                writer.write(iCsvRecord.getHeader());
+            writer.write(iCsvRecord.getLine());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

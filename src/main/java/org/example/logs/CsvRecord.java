@@ -8,7 +8,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class CsvRecord {
+public class CsvRecord implements ICsvRecord {
+
     public static final String[] FIELDS_ORDER = {"nr_pokolenia", "najlepsza_ocena", "średnia_ocen", "najgorsza_ocena"};
 
     @CsvBindByPosition(position = 0)
@@ -23,7 +24,8 @@ public class CsvRecord {
     @CsvBindByPosition(position = 3)
     private double worstScore;
 
-    public static String getHeader() {
+    @Override
+    public String getHeader() {
         return String.format(
                 "%s, %s, %s, %s\n",
                 CsvRecord.FIELDS_ORDER[0],
@@ -32,4 +34,21 @@ public class CsvRecord {
                 CsvRecord.FIELDS_ORDER[3]
         );
     }
+
+    @Override
+    public String getLine() {
+        return String.format(
+                "%d, %f, %f, %f\n",
+                generationNr,
+                bestScore,
+                averageScore,
+                worstScore
+        );
+    }
+
+    @Override
+    public String getFileName() {
+        return "logs";
+    }
+
 }
