@@ -1,9 +1,10 @@
 package org.example.model;
 
-import org.example.support.Evaluator;
+import org.example.evaluator.IEvaluator;
+import org.example.initialization.IInitialization;
 
 public interface ISpecimen {
-    void init();
-    void eval(Evaluator evaluator);
+    void init(IInitialization initialization);
+    void eval(IEvaluator evaluator);
     void fix();
 }

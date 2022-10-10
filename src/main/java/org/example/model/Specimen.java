@@ -1,13 +1,16 @@
 package org.example.model;
 
 import lombok.Getter;
-import org.example.support.Evaluator;
+import lombok.Setter;
+import org.example.evaluator.IEvaluator;
+import org.example.initialization.IInitialization;
 
 import java.util.*;
 
 @Getter
 public class Specimen implements ISpecimen {
-    private DataTTP dataTTP;
+    private final DataTTP dataTTP;
+    @Setter
     private Integer[] nodeGenome;
     private HashSet<ItemTTP> knapsack;
     private int currentKnapsackWeight;
@@ -21,7 +24,7 @@ public class Specimen implements ISpecimen {
         currentKnapsackWeight = 0;
     }
 
-    private boolean addToKnapsack(ItemTTP itemTTP) {
+    public boolean addToKnapsack(ItemTTP itemTTP) {
         if (itemTTP == null || !checkIfEnoughCapacity(itemTTP) && !knapsack.contains(itemTTP))
             return false;
         knapsack.add(itemTTP);
@@ -42,27 +45,13 @@ public class Specimen implements ISpecimen {
     }
 
     @Override
-    public void init() {
-        Random random = new Random();
-        ArrayList<NodeTTP> possibleNodes = new ArrayList<>(List.copyOf(dataTTP.getNodes()));
-
-        int index = 0;
-        while (possibleNodes.size() != 0) {
-            NodeTTP chosenNode = possibleNodes.get(random.nextInt(possibleNodes.size()));
-            nodeGenome[index] = chosenNode.getId();
-            possibleNodes.remove(chosenNode);
-            index++;
-        }
-
-        for (ItemTTP item : dataTTP.getItems()) {
-            if (random.nextDouble() <= 0.2) {
-                addToKnapsack(item);
-            }
-        }
+    public void init(IInitialization initialization) {
+        initialization.startInitializationNode(this);
+        initialization.startInitializationItems(this);
     }
 
     @Override
-    public void eval(Evaluator evaluator) {
+    public void eval(IEvaluator evaluator) {
         fitness = evaluator.evaluateSpecimen(this);
     }
 

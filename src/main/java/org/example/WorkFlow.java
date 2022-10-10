@@ -1,47 +1,62 @@
 package org.example;
 
+import lombok.RequiredArgsConstructor;
 import org.example.config.ConfigEA;
+import org.example.evaluator.Evaluator;
+import org.example.evaluator.IEvaluator;
+import org.example.initialization.IInitialization;
+import org.example.initialization.InitializationGreedy;
 import org.example.loader.LoaderTTP;
 import org.example.logs.Analysis;
+import org.example.logs.CsvRecord;
 import org.example.logs.Logger;
 import org.example.model.DataTTP;
 import org.example.model.Specimen;
-import org.example.support.Evaluator;
 import org.example.support.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
 
+@RequiredArgsConstructor
 public class WorkFlow {
+
+    private final DataTTP dataTTP;
+
+    private final IInitialization initialization;
+    private final IEvaluator evaluator;
+
 
     private static final String inputPath = Utils.getInputPath;
 
-    private long currentIteration = 0L;
+    private int currentIteration = 0;
 
     public void start() {
-        DataTTP dataTTP = new DataTTP();
         File file = new File(inputPath);
         LoaderTTP loaderTTP = new LoaderTTP(dataTTP);
         loaderTTP.readAllProperties(file);
 
-        ArrayList<Specimen> population = initPopulation(Utils.getSuggestedConfigEA(), dataTTP);
+//        this.initialization = new InitializationRandom();
+//        this.evaluator = new Evaluator(dataTTP);
 
-        log(population);
-//        Specimen specimen = new Specimen(dataTTP);
-//        Evaluator evaluator = new Evaluator(dataTTP);
-//
-//        specimen.init();
-//        specimen.eval(evaluator);
+//        ArrayList<Specimen> population = initPopulation(Utils.getSuggestedConfigEA(), dataTTP);
+
+//        log(population);
+        Specimen specimen = new Specimen(dataTTP);
+        Evaluator evaluator = new Evaluator(dataTTP);
+        InitializationGreedy initializationGreedy = new InitializationGreedy();
+
+        specimen.init(initializationGreedy);
+        specimen.eval(evaluator);
 
     }
 
     private ArrayList<Specimen> initPopulation(ConfigEA configEA, DataTTP dataTTP) {
         ArrayList<Specimen> population = new ArrayList<>(configEA.getPopSize());
+
         for (int i = 0; i < configEA.getPopSize(); i++) {
             Specimen specimen = new Specimen(dataTTP);
-            Evaluator evaluator = new Evaluator(dataTTP);
 
-            specimen.init();
+            specimen.init(initialization);
             specimen.eval(evaluator);
 
             population.add(specimen);
@@ -61,7 +76,9 @@ public class WorkFlow {
     private void log(ArrayList<Specimen> pop) {
         Analysis analysis = new Analysis();
         analysis.analysisPopulation(pop);
+        CsvRecord csvRecord = new CsvRecord(this.currentIteration, analysis.getBestScore(), analysis.getAvgScore(), analysis.getWorstScore());
         Logger.log(analysis);
+        Logger.log(csvRecord);
     }
 
 }

@@ -1,11 +1,11 @@
-package org.example.support;
+package org.example.evaluator;
 
 import org.example.model.DataTTP;
 import org.example.model.Specimen;
 
 import java.util.stream.Collectors;
 
-public class Evaluator {
+public class Evaluator implements IEvaluator {
     DataTTP dataTTP;
 
     public Evaluator(DataTTP dataTTP) {

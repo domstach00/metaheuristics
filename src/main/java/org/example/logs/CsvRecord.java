@@ -16,13 +16,13 @@ public class CsvRecord implements ICsvRecord {
     private int generationNr;
 
     @CsvBindByPosition(position = 1)
-    private double bestScore;
+    private String bestScore;
 
     @CsvBindByPosition(position = 2)
-    private double averageScore;
+    private String averageScore;
 
     @CsvBindByPosition(position = 3)
-    private double worstScore;
+    private String worstScore;
 
     @Override
     public String getHeader() {
@@ -38,7 +38,7 @@ public class CsvRecord implements ICsvRecord {
     @Override
     public String getLine() {
         return String.format(
-                "%d, %f, %f, %f\n",
+                "%d, %s, %s, %s\n",
                 generationNr,
                 bestScore,
                 averageScore,
@@ -48,7 +48,7 @@ public class CsvRecord implements ICsvRecord {
 
     @Override
     public String getFileName() {
-        return "logs";
+        return "logger.csv";
     }
 
 }
