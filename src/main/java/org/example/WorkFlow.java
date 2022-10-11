@@ -2,10 +2,9 @@ package org.example;
 
 import lombok.RequiredArgsConstructor;
 import org.example.config.ConfigEA;
-import org.example.evaluator.Evaluator;
 import org.example.evaluator.IEvaluator;
 import org.example.initialization.IInitialization;
-import org.example.initialization.InitializationGreedy;
+import org.example.itemselector.IItemSelector;
 import org.example.loader.LoaderTTP;
 import org.example.logs.Analysis;
 import org.example.logs.CsvRecord;
@@ -24,6 +23,7 @@ public class WorkFlow {
 
     private final IInitialization initialization;
     private final IEvaluator evaluator;
+    private final IItemSelector itemSelector;
 
 
     private static final String inputPath = Utils.getInputPath;
@@ -38,15 +38,18 @@ public class WorkFlow {
 //        this.initialization = new InitializationRandom();
 //        this.evaluator = new Evaluator(dataTTP);
 
-//        ArrayList<Specimen> population = initPopulation(Utils.getSuggestedConfigEA(), dataTTP);
+        ArrayList<Specimen> population = initPopulation(Utils.getSuggestedConfigEA(), dataTTP);
 
-//        log(population);
-        Specimen specimen = new Specimen(dataTTP);
-        Evaluator evaluator = new Evaluator(dataTTP);
-        InitializationGreedy initializationGreedy = new InitializationGreedy();
+        log(population);
 
-        specimen.init(initializationGreedy);
-        specimen.eval(evaluator);
+
+//        Specimen specimen = new Specimen(dataTTP);
+//        Evaluator evaluator = new Evaluator(dataTTP);
+//        InitializationGreedy initialization = new InitializationGreedy();
+//
+//        specimen.init(initialization);
+//        specimen.eval(evaluator);
+
 
     }
 
@@ -56,7 +59,7 @@ public class WorkFlow {
         for (int i = 0; i < configEA.getPopSize(); i++) {
             Specimen specimen = new Specimen(dataTTP);
 
-            specimen.init(initialization);
+            specimen.init(initialization, itemSelector);
             specimen.eval(evaluator);
 
             population.add(specimen);

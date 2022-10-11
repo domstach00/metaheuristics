@@ -1,6 +1,6 @@
 package org.example.initialization;
 
-import org.example.model.ItemTTP;
+import org.example.itemselector.IItemSelector;
 import org.example.model.NodeTTP;
 import org.example.model.Specimen;
 
@@ -28,12 +28,7 @@ public class InitializationRandom implements IInitialization {
     }
 
     @Override
-    public void startInitializationItems(Specimen specimen) {
-        // Select random items
-        for (ItemTTP item : specimen.getDataTTP().getItems()) {
-            if (random.nextDouble() <= 0.3) {
-                specimen.addToKnapsack(item);
-            }
-        }
+    public void startInitializationItems(IItemSelector itemSelector, Specimen specimen) {
+        itemSelector.select(specimen);
     }
 }

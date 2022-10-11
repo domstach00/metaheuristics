@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.evaluator.IEvaluator;
 import org.example.initialization.IInitialization;
+import org.example.itemselector.IItemSelector;
 
 import java.util.*;
 
@@ -45,9 +46,9 @@ public class Specimen implements ISpecimen {
     }
 
     @Override
-    public void init(IInitialization initialization) {
+    public void init(IInitialization initialization, IItemSelector itemSelector) {
         initialization.startInitializationNode(this);
-        initialization.startInitializationItems(this);
+        initialization.startInitializationItems(itemSelector, this);
     }
 
     @Override

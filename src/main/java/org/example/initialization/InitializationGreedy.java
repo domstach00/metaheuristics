@@ -1,7 +1,7 @@
 package org.example.initialization;
 
 import lombok.RequiredArgsConstructor;
-import org.example.model.ItemTTP;
+import org.example.itemselector.IItemSelector;
 import org.example.model.NodeTTP;
 import org.example.model.Specimen;
 
@@ -9,74 +9,51 @@ import java.util.*;
 
 @RequiredArgsConstructor
 public class InitializationGreedy implements IInitialization{
-
-    private static ArrayList<NodeTTP> usedStartNodes = new ArrayList<>();
-
-    private static boolean flag = true;
-
     Random random = new Random();
 
     @Override
     public void startInitializationNode(Specimen specimen) {
         ArrayList<NodeTTP> possibleNodes = new ArrayList<>(List.copyOf(specimen.getDataTTP().getNodes()));
 
-        if (flag) {
-            if (usedStartNodes.size() >= specimen.getDataTTP().getNodes().size())
-                return;
-            for (NodeTTP nodeTTP : possibleNodes) {
-                if (!usedStartNodes.contains(nodeTTP)) {
-                    usedStartNodes.add(nodeTTP);
-                    specimen.setNodeGenome(greedyAlg(possibleNodes, nodeTTP, specimen.getDataTTP().getNodeAdjacencyMatrix()));
-                    break;
-                }
-            }
-        }
-        else {
-            // Random Node order
-            int index = 0;
-            while (possibleNodes.size() != 0) {
-                NodeTTP chosenNode = possibleNodes.get(random.nextInt(possibleNodes.size()));
-                specimen.getNodeGenome()[index] = chosenNode.getId();
-                possibleNodes.remove(chosenNode);
-                index++;
-            }
+        // Random Node order
+        int index = 0;
+        while (possibleNodes.size() != 0) {
+            NodeTTP chosenNode = possibleNodes.get(random.nextInt(possibleNodes.size()));
+            specimen.getNodeGenome()[index] = chosenNode.getId();
+            possibleNodes.remove(chosenNode);
+            index++;
         }
     }
 
     @Override
-    public void startInitializationItems(Specimen specimen) {
-        // Select random items
-        for (ItemTTP item : specimen.getDataTTP().getItems()) {
-            if (random.nextDouble() <= 0.3) {
-                specimen.addToKnapsack(item);
-            }
-        }
+    public void startInitializationItems(IItemSelector itemSelector, Specimen specimen) {
+        itemSelector.select(specimen);
     }
 
     private Integer[] greedyAlg(ArrayList<NodeTTP> nodes, NodeTTP startNode,  ArrayList<ArrayList<Double>> nodeAdjacencyMatrix) {
-        Integer[] nodeGenome = new Integer[nodes.size()];
-        nodeGenome[0] = startNode.getId();
-        int bestNextNodeId = nodeGenome[0];
-        int lastIndex = 0;
+        Integer[] nodeGenom = new Integer[nodes.size()];
+        ArrayList<Integer> nodeGenomArray = new ArrayList<>();
+        nodeGenomArray.add(startNode.getId());
+        nodeGenom[0] = startNode.getId();
 
-        ArrayList<Double> list = nodeAdjacencyMatrix.get(nodeGenome[lastIndex]);
-        System.out.println(Arrays.toString(list.toArray()));
-        bestNextNodeId = list.indexOf(
-                list.stream()
-                        .filter(aDouble -> aDouble != 0)
-                        .min(Double::compareTo)
-                        .orElseThrow());
-        nodeGenome[++lastIndex] = bestNextNodeId;
+        int nextNodeIndex = startNode.getId();
+        while (nodeGenomArray.size() < nodes.size()) {
+            ArrayList<Double> nodeAdjacency = new ArrayList<>(nodeAdjacencyMatrix.get(nextNodeIndex));
+            for (int i = nodeAdjacency.size() - 1; i >= 0; i--)
+                if (nodeGenomArray.contains(i) || nodeAdjacency.get(i) == 0)
+                    nodeAdjacency.set(i, 0d);
 
-
-        return nodeGenome;
-    }
-
-    private boolean contain(Integer[] listOfNodes, int value) {
-        for (Integer val : listOfNodes) {
-            if (val == value)
-                return true;
+            nextNodeIndex = nodeAdjacency.indexOf(
+                    nodeAdjacency.stream()
+                            .filter(aDouble -> aDouble != 0)
+                            .min(Double::compareTo)
+                            .orElseThrow()
+            );
+            nodeGenomArray.add(nextNodeIndex);
         }
-        return false;
+
+        for (int i = 0; i < nodeGenomArray.size(); i++)
+            nodeGenom[i] = nodeGenomArray.get(i);
+        return nodeGenom;
     }
 }

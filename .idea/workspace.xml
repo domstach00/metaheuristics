@@ -5,18 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7e1d569-67fd-410e-ad49-dc404dbe123f" name="Changes" comment="Some changes">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/evaluator/IEvaluator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/initialization/IInitialization.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/initialization/InitializationGreedy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/initialization/InitializationRandom.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/itemselector/IItemSelector.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/itemselector/ItemSelectorPrice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/itemselector/ItemSelectorPriceAndWeight.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/operators/crossover/CrossoverCycle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/operators/crossover/CrossoverOrdered.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/operators/crossover/CrossoverPartiallyMatched.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/operators/crossover/ICrossover.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/operators/mutation/IMutation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/operators/mutation/MutationInversion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/operators/mutation/MutationSwap.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/operators/selection/ISelection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/operators/selection/SelectionRoulette.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/operators/selection/SelectionTournament.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/csv-plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv-plugin.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/WorkFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/WorkFlow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logs/CsvRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logs/CsvRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/initialization/IInitialization.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/initialization/IInitialization.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/initialization/InitializationGreedy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/initialization/InitializationGreedy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/initialization/InitializationRandom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/initialization/InitializationRandom.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/model/ISpecimen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/model/ISpecimen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/model/ItemTTP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/model/ItemTTP.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/model/Specimen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/model/Specimen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/support/Evaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/evaluator/Evaluator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/support/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/support/Utils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,21 +55,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "E:/Projekty/Pwr/Metaheurystyki/src/main/resources/input",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "advanced.settings",
-    "spring.configuration.checksum": "9a1ce2c0635629135dae4049dfa8a53f"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Projekty/Pwr/Metaheurystyki/src/main/resources/input&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;9a1ce2c0635629135dae4049dfa8a53f&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Projekty\Pwr\Metaheurystyki\src\main\resources\input" />
@@ -132,5 +144,16 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Some changes" />
     <option name="LAST_COMMIT_MESSAGE" value="Some changes" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/evaluator/Evaluator.java</url>
+          <line>33</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

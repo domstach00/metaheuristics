@@ -10,6 +10,10 @@ public class ItemTTP {
     private int profit;
     private int weight;
     private int assignedNodeId;
+
+    public double getProfitByWeight() {
+        return (double) profit / (double) weight;
+    }
 }
 
 
