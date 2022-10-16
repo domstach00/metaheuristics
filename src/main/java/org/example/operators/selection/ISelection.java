@@ -5,5 +5,5 @@ import org.example.model.Specimen;
 import java.util.ArrayList;
 
 public interface ISelection {
-    void selection(ArrayList<Specimen> population);
+    Specimen selection(ArrayList<Specimen> population, int n);
 }

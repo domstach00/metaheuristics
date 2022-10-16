@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvBindByPosition;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.example.support.Utils;
 
 @Data
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class CsvRecord implements ICsvRecord {
     @Override
     public String getHeader() {
         return String.format(
-                "%s, %s, %s, %s\n",
+                "%s; %s; %s; %s\n",
                 CsvRecord.FIELDS_ORDER[0],
                 CsvRecord.FIELDS_ORDER[1],
                 CsvRecord.FIELDS_ORDER[2],
@@ -38,7 +39,7 @@ public class CsvRecord implements ICsvRecord {
     @Override
     public String getLine() {
         return String.format(
-                "%d, %s, %s, %s\n",
+                "%d; %s; %s; %s\n",
                 generationNr,
                 bestScore,
                 averageScore,
@@ -48,7 +49,7 @@ public class CsvRecord implements ICsvRecord {
 
     @Override
     public String getFileName() {
-        return "logger.csv";
+        return Utils.getInputFileNameNoExtension() + "-logger_" + Utils.getSuggestedConfigEA().getConfigEAFileName() + ".csv";
     }
 
 }

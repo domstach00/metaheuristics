@@ -23,7 +23,7 @@ public class Analysis implements ICsvRecord{
     private double std = 0d;
 
     public Analysis() {
-        this.bestScore = Double.MIN_VALUE;
+        this.bestScore = -1 * Double.MAX_VALUE;
         this.worstScore = Double.MAX_VALUE;
     }
 

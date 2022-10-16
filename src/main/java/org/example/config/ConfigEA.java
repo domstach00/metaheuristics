@@ -11,5 +11,10 @@ public class ConfigEA  {
     private double pX;
     private double pM;
     private int tour;
+
+    public String getConfigEAFileName() {
+        return String.format("popSize-%d_gen-%d_pX-%f_pM-%f_tour-%d",
+                popSize, gen, pX, pM, tour);
+    }
 }
 

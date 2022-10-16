@@ -1,30 +1,27 @@
 package org.example.operators.mutation;
 
 import org.example.model.Specimen;
+import org.example.support.Utils;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MutationInversion implements IMutation {
 
     @Override
-    public void mutation(Specimen specimen, double probability) {
-        Random random = new Random();
+    public Specimen mutation(Specimen specimen, double probability) {
+        if (ThreadLocalRandom.current().nextDouble() > probability)
+            return specimen;
 
-        int indexToStart = -1;
-        int indexToFinish = -1;
-        int idIndex = 0;
+        Specimen newSpecimen = new Specimen(specimen);
+        int[] startAndEnd = Utils.getStartAndFinishValues(newSpecimen.getNodeGenome().length);
+        int indexToStart = startAndEnd[0];
+        int indexToFinish = startAndEnd[1];
 
-        while (indexToStart == -1 || indexToFinish == -1 || indexToStart == indexToFinish || Math.abs(indexToStart - indexToFinish) == 1) {
-            if (random.nextDouble() <= probability)
-                indexToStart = idIndex % specimen.getNodeGenome().length;
-            else if (random.nextDouble() <= probability)
-                indexToFinish = idIndex % specimen.getNodeGenome().length;
-            idIndex++;
-        }
-        if (indexToStart > indexToFinish)
-            inverse(specimen.getNodeGenome(), indexToFinish, indexToStart);
-        else
-            inverse(specimen.getNodeGenome(), indexToStart, indexToFinish);
+
+        inverse(newSpecimen.getNodeGenome(), indexToStart, indexToFinish);
+
+
+        return newSpecimen;
     }
 
     // Inverse include startIndex, but exclude endIndex

@@ -3,24 +3,31 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="/src/main/resources/logs/analysis.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="/src/main/resources/logs/logger.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\src\main\resources\logs\analysis.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\logs\easy_4-logger_popSize-100_gen-100_pX-0,700000_pM-0,100000_tour-5.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\logs\hard_3-logger_popSize-100_gen-100_pX-0,700000_pM-0,100000_tour-5.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\logs\hard_4-logger_popSize-100_gen-100_pX-0,700000_pM-0,100000_tour-5.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
             </Attribute>
           </value>
         </entry>
@@ -31,6 +38,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\main\resources\logs\medium_3-logger_popSize-100_gen-1000_pX-0,700000_pM-0,100000_tour-1.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\logs\medium_3-logger_popSize-100_gen-100_pX-0,700000_pM-0,100000_tour-5.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\resources\logs\medium_3-logger_popSize-10_gen-1000_pX-0,700000_pM-0,100000_tour-2.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry />
       </map>
     </option>
   </component>

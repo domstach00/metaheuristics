@@ -10,6 +10,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Logger {
     private static String logDirectory = Utils.getLogsPath;
@@ -39,10 +41,19 @@ public class Logger {
 
         boolean addHeader = !file.exists();
 
+        // Create path if not exist
+        try {
+            if (addHeader && !new File(logDirectory).isDirectory())
+                Files.createDirectories(Paths.get(logDirectory));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Append to log file
         try (var writer = new BufferedWriter(new FileWriter(file, true))) {
             if (addHeader)
                 writer.write(iCsvRecord.getHeader());
-            writer.write(iCsvRecord.getLine());
+            writer.write(iCsvRecord.getLine().replace('.', ','));
 
         } catch (IOException e) {
             throw new RuntimeException(e);

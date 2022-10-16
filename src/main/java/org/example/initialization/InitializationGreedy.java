@@ -6,10 +6,10 @@ import org.example.model.NodeTTP;
 import org.example.model.Specimen;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
 public class InitializationGreedy implements IInitialization{
-    Random random = new Random();
 
     @Override
     public void startInitializationNode(Specimen specimen) {
@@ -18,7 +18,7 @@ public class InitializationGreedy implements IInitialization{
         // Random Node order
         int index = 0;
         while (possibleNodes.size() != 0) {
-            NodeTTP chosenNode = possibleNodes.get(random.nextInt(possibleNodes.size()));
+            NodeTTP chosenNode = possibleNodes.get(ThreadLocalRandom.current().nextInt(possibleNodes.size()));
             specimen.getNodeGenome()[index] = chosenNode.getId();
             possibleNodes.remove(chosenNode);
             index++;

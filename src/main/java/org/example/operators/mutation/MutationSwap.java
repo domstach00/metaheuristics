@@ -2,28 +2,29 @@ package org.example.operators.mutation;
 
 import org.example.model.Specimen;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MutationSwap implements IMutation {
-    Random random = new Random();
 
     @Override
-    public void mutation(Specimen specimen, double probability) {
-        for (int i = 0; i < specimen.getNodeGenome().length; i++) {
-            if (random.nextDouble() <= probability)
-                swap(specimen.getNodeGenome(), i);
+    public Specimen mutation(Specimen specimen, double probability) {
+        Specimen newSpecimen = new Specimen(specimen);
+        for (int i = 0; i < newSpecimen.getNodeGenome().length; i++) {
+            if (ThreadLocalRandom.current().nextDouble() <= probability)
+                swap(newSpecimen.getNodeGenome(), i);
         }
+        return newSpecimen;
     }
 
     private void swap(Integer[] genome, int index) {
         if (genome.length < 1)
             return;
-        int swapWith = random.nextInt(genome.length);
+        int swapWith = ThreadLocalRandom.current().nextInt(genome.length);
         while (swapWith == index)
-            swapWith = random.nextInt(genome.length);
+            swapWith = ThreadLocalRandom.current().nextInt(genome.length);
 
-        Integer tmp = genome[index];
+        Integer valueFromIndex = genome[index];
         genome[index] = genome[swapWith];
-        genome[swapWith] = genome[tmp];
+        genome[swapWith] = valueFromIndex;
     }
 }

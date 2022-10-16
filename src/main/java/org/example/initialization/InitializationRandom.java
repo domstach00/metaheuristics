@@ -6,11 +6,9 @@ import org.example.model.Specimen;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class InitializationRandom implements IInitialization {
-
-    private final Random random = new Random();
 
     @Override
     public void startInitializationNode(Specimen specimen) {
@@ -19,7 +17,7 @@ public class InitializationRandom implements IInitialization {
         // Random Node order
         int index = 0;
         while (possibleNodes.size() != 0) {
-            NodeTTP chosenNode = possibleNodes.get(random.nextInt(possibleNodes.size()));
+            NodeTTP chosenNode = possibleNodes.get(ThreadLocalRandom.current().nextInt(possibleNodes.size()));
             specimen.getNodeGenome()[index] = chosenNode.getId();
             possibleNodes.remove(chosenNode);
             index++;
