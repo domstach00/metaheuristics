@@ -37,7 +37,7 @@ public class AnotherEvaluator implements IEvaluator {
             double distance = nodeFrom.getDistance(nodeTo);
 
             double currentSpeed = dataTTP.getMaxSpeed() - currentWeight * ((dataTTP.getMaxSpeed() - dataTTP.getMinSpeed()) / dataTTP.getKnapsackCapacity());
-            time += distance * currentSpeed;
+            time += distance / currentSpeed;
             currentWeight += updateWeight(currentSpeed, specimen.getNodeGenome()[i], specimen);
         }
 

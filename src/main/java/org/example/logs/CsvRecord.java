@@ -4,7 +4,11 @@ import com.opencsv.bean.CsvBindByPosition;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import org.example.model.Specimen;
 import org.example.support.Utils;
+
+import java.util.ArrayList;
 
 @Data
 @AllArgsConstructor
@@ -13,17 +17,47 @@ public class CsvRecord implements ICsvRecord {
 
     public static final String[] FIELDS_ORDER = {"nr_pokolenia", "najlepsza_ocena", "średnia_ocen", "najgorsza_ocena"};
 
+    public static ArrayList<Double> globalAverageScoreList = new ArrayList<>();
+
     @CsvBindByPosition(position = 0)
     private int generationNr;
 
     @CsvBindByPosition(position = 1)
-    private String bestScore;
+    private double bestScore = -1 * Double.MAX_VALUE;
+    @Getter
+    private static double globalBestScore = -1 * Double.MAX_VALUE;
 
     @CsvBindByPosition(position = 2)
-    private String averageScore;
+    private double averageScore;
 
     @CsvBindByPosition(position = 3)
-    private String worstScore;
+    private double worstScore = Double.MAX_VALUE;
+    @Getter
+    private static double globalWorstScore = Double.MAX_VALUE;
+
+    public CsvRecord(int generationNr, ArrayList<Specimen> population) {
+        this.generationNr = generationNr;
+        ArrayList<Double> fitnessList = new ArrayList<>();
+        for (Specimen specimen: population){
+            if (bestScore < specimen.getFitness())
+                bestScore = specimen.getFitness();
+            if (worstScore > specimen.getFitness())
+                worstScore = specimen.getFitness();
+
+            fitnessList.add(specimen.getFitness());
+        }
+
+        averageScore = fitnessList.stream()
+                .mapToDouble(Double::doubleValue)
+                .average()
+                .orElseThrow();
+
+        globalAverageScoreList.add(averageScore);
+        if (bestScore > globalBestScore)
+            globalBestScore = bestScore;
+        if (worstScore < globalWorstScore)
+            globalWorstScore = worstScore;
+    }
 
     @Override
     public String getHeader() {
@@ -46,6 +80,8 @@ public class CsvRecord implements ICsvRecord {
                 worstScore
         );
     }
+
+
 
     @Override
     public String getFileName() {

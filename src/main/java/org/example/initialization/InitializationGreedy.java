@@ -67,6 +67,9 @@ public class InitializationGreedy implements IInitialization{
 
         for (int i = 0; i < nodeGenomArray.size(); i++)
             nodeGenom[i] = nodeGenomArray.get(i);
+
+        if (nodeGenom.length != nodeAdjacencyMatrix.size())
+            System.out.println("X");
         return nodeGenom;
     }
 }

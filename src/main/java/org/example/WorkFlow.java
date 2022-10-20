@@ -110,23 +110,37 @@ public class WorkFlow {
             while (selected1 == selected2)
                 selected2 = selection.selection(population, configEA.getTour());
 
+//            if (random <= configEA.getPX()) {
+//                Specimen newSpecimen = crossover.crossover(selected1, selected2);
+//                newSpecimen.eval(evaluator);
+//                newPopulation.add(newSpecimen);
+//            }
+//            else {
+//                Specimen newSpecimen1 = mutation.mutation(selected1, configEA.getPM());
+//                newSpecimen1.initNewItems(initialization, itemSelector);
+//                newSpecimen1.eval(evaluator);
+//                newPopulation.add(newSpecimen1);
+//                if (newPopulation.size() < configEA.getPopSize()) {
+//                    Specimen newSpecimen2 = mutation.mutation(selected2, configEA.getPM());
+//                    newSpecimen2.initNewItems(initialization, itemSelector);
+//                    newSpecimen2.eval(evaluator);
+//                    newPopulation.add(newSpecimen2);
+//                }
+//            }
             if (random <= configEA.getPX()) {
-                Specimen newSpecimen = crossover.crossover(selected1, selected2);
-                ItemSelectorPriceAndWeight itemSelectorPriceAndWeight = new ItemSelectorPriceAndWeight();
-                newSpecimen.eval(evaluator);
-                newPopulation.add(newSpecimen);
+                selected1 = crossover.crossover(selected1, selected2);
+                selected1.eval(evaluator);
+                newPopulation.add(selected1);
             }
-            else {
-                Specimen newSpecimen1 = mutation.mutation(selected1, configEA.getPM());
-                newSpecimen1.initNewItems(initialization, itemSelector);
-                newSpecimen1.eval(evaluator);
-                newPopulation.add(newSpecimen1);
-                if (newPopulation.size() < configEA.getPopSize()) {
-                    Specimen newSpecimen2 = mutation.mutation(selected2, configEA.getPM());
-                    newSpecimen1.initNewItems(initialization, itemSelector);
-                    newSpecimen2.eval(evaluator);
-                    newPopulation.add(newSpecimen2);
-                }
+            selected1 = mutation.mutation(selected1, configEA.getPM());
+            selected1.initNewItems(initialization, itemSelector);
+            selected1.eval(evaluator);
+            newPopulation.add(selected1);
+            if (newPopulation.size() < configEA.getPopSize()) {
+                selected2 = mutation.mutation(selected2, configEA.getPM());
+                selected2.initNewItems(initialization, itemSelector);
+                selected2.eval(evaluator);
+                newPopulation.add(selected2);
             }
         }
         return newPopulation;
@@ -137,9 +151,7 @@ public class WorkFlow {
     }
 
     private void log(ArrayList<Specimen> pop) {
-        Analysis analysis = new Analysis();
-        analysis.analysisPopulation(pop);
-        CsvRecord csvRecord = new CsvRecord(this.currentIteration, analysis.getBestScore(), analysis.getAvgScore(), analysis.getWorstScore());
+        CsvRecord csvRecord = new CsvRecord(this.currentIteration, pop);
         Logger.log(csvRecord);
     }
 
@@ -149,7 +161,7 @@ public class WorkFlow {
 
     private void logFinalAnalysis() {
         Analysis analysis = new Analysis();
-        analysis.analysisPopulation(currentPopulation);
+        analysis.fetchDataFromGlobalCsvRecord();
         Logger.log(analysis);
 
     }

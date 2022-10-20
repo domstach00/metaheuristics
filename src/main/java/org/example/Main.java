@@ -23,9 +23,9 @@ public class Main {
                 dataTTP,
                 Utils.getSuggestedConfigEA(),
                 new AnotherEvaluator(dataTTP),
-                new InitializationGreedy(),
+                new InitializationRandom(),
                 new ItemSelectorPriceAndWeight(),
-                new CrossoverOrdered(),
+                new CrossoverPartiallyMatched(),
                 new MutationSwap(),
                 new SelectionRoulette());
         workFlow.start();

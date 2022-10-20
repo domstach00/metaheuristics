@@ -27,6 +27,19 @@ public class Analysis implements ICsvRecord{
         this.worstScore = Double.MAX_VALUE;
     }
 
+    public void fetchDataFromGlobalCsvRecord() {
+        bestScore = CsvRecord.getGlobalBestScore();
+        worstScore = CsvRecord.getGlobalWorstScore();
+
+        ArrayList<Double> avgList = CsvRecord.globalAverageScoreList;
+        avgScore = avgList.stream()
+                .mapToDouble(Double::doubleValue)
+                .average()
+                .orElseThrow();
+
+        std = calcStd(CsvRecord.globalAverageScoreList);
+    }
+
     public void analysisPopulation(ArrayList<Specimen> population) {
         ArrayList<Double> fitnessList = new ArrayList<>();
         for (Specimen specimen: population){
@@ -42,13 +55,25 @@ public class Analysis implements ICsvRecord{
                 .mapToDouble(Double::doubleValue)
                 .average()
                 .orElseThrow();
+    }
 
+    private double calcStd(ArrayList<Double> avgScoreList) {
+        double sum = 0.0, standard_deviation = 0.0;
+        for(double tmp : avgScoreList)
+            sum += tmp;
+
+        double mean = sum/ avgScoreList.size();
+
+        for(double temp: avgScoreList)
+            standard_deviation += Math.pow(temp - mean, 2);
+
+        return Math.sqrt(standard_deviation/ avgScoreList.size());
     }
 
     @Override
     public String getHeader() {
         return String.format(
-                "%s, %s, %s, %s\n",
+                "%s; %s; %s; %s\n",
                 "best",
                 "worst",
                 "avg",
@@ -75,11 +100,15 @@ public class Analysis implements ICsvRecord{
     @Override
     public String getLine() {
         return String.format(
-                "%s, %s, %s, %s\n",
-                getBestScore(),
-                getWorstScore(),
-                getAvgScore(),
-                getStd()
+                "%s; %s; %s; %s\n",
+//                getBestScore(),
+//                getWorstScore(),
+//                getAvgScore(),
+//                getStd()
+                bestScore,
+                worstScore,
+                avgScore,
+                std
         );
     }
 }
