@@ -28,16 +28,22 @@ public class CrossoverPartiallyMatched implements ICrossover {
             parent2Map.put(valueFromParent2, valueFromParent1);
         }
 
+//        for (int i = 0; i < startIndex; i++)
+//            if (parent2Map.get(parent1.getNodeGenome()[i]) != null)
+//                parent1.getNodeGenome()[i] = parent2Map.get(parent1.getNodeGenome()[i]);
+//        for (int i = finishIndex; i < parent1.getNodeGenome().length; i++)
+//            if (parent2Map.get(parent1.getNodeGenome()[i]) != null)
+//                parent1.getNodeGenome()[i] = parent2Map.get(parent1.getNodeGenome()[i]);
+
+        for (int i = startIndex; i < finishIndex; i++)
+            parent1.getNodeGenome()[i] = parent1Map.get(parent1.getNodeGenome()[i]);
+
         for (int i = 0; i < startIndex; i++)
             if (parent2Map.get(parent1.getNodeGenome()[i]) != null)
                 parent1.getNodeGenome()[i] = parent2Map.get(parent1.getNodeGenome()[i]);
         for (int i = finishIndex; i < parent1.getNodeGenome().length; i++)
             if (parent2Map.get(parent1.getNodeGenome()[i]) != null)
                 parent1.getNodeGenome()[i] = parent2Map.get(parent1.getNodeGenome()[i]);
-
-        for (int i = startIndex; i < finishIndex; i++)
-            parent1.getNodeGenome()[i] = parent1Map.get(parent1.getNodeGenome()[i]);
-
         return parent1;
     }
 }
