@@ -13,7 +13,7 @@ import java.util.ArrayList;
 @Data
 @AllArgsConstructor
 @Builder
-public class CsvRecord implements ICsvRecord {
+public class CsvRecordEA implements ICsvRecord {
 
     public static final String[] FIELDS_ORDER = {"nr_pokolenia", "najlepsza_ocena", "średnia_ocen", "najgorsza_ocena"};
 
@@ -35,7 +35,7 @@ public class CsvRecord implements ICsvRecord {
     @Getter
     private static double globalWorstScore = Double.MAX_VALUE;
 
-    public CsvRecord(int generationNr, ArrayList<Specimen> population) {
+    public CsvRecordEA(int generationNr, ArrayList<Specimen> population) {
         this.generationNr = generationNr;
         ArrayList<Double> fitnessList = new ArrayList<>();
         for (Specimen specimen: population){
@@ -63,10 +63,10 @@ public class CsvRecord implements ICsvRecord {
     public String getHeader() {
         return String.format(
                 "%s; %s; %s; %s\n",
-                CsvRecord.FIELDS_ORDER[0],
-                CsvRecord.FIELDS_ORDER[1],
-                CsvRecord.FIELDS_ORDER[2],
-                CsvRecord.FIELDS_ORDER[3]
+                CsvRecordEA.FIELDS_ORDER[0],
+                CsvRecordEA.FIELDS_ORDER[1],
+                CsvRecordEA.FIELDS_ORDER[2],
+                CsvRecordEA.FIELDS_ORDER[3]
         );
     }
 

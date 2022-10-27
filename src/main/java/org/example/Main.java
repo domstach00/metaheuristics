@@ -12,12 +12,27 @@ import org.example.operators.crossover.CrossoverOrdered;
 import org.example.operators.crossover.CrossoverPartiallyMatched;
 import org.example.operators.mutation.MutationInversion;
 import org.example.operators.mutation.MutationSwap;
+import org.example.operators.mutation.MutationSwapTS;
 import org.example.operators.selection.SelectionRoulette;
 import org.example.operators.selection.SelectionTournament;
 import org.example.support.Utils;
 
+
 public class Main {
     public static void main(String[] args) {
+        DataTTP dataTTP = new DataTTP();
+        TabuSearch tabuSearch = new TabuSearch(
+                Utils.getSuggestedConfigTS(),
+                dataTTP,
+                new AnotherEvaluator(dataTTP),
+                new InitializationRandom(),
+                new ItemSelectorPriceAndWeight(),
+                new MutationSwapTS()
+        );
+        tabuSearch.start();
+
+    }
+    public static void runEA() {
         DataTTP dataTTP = new DataTTP();
         WorkFlow workFlow = new WorkFlow(
                 dataTTP,

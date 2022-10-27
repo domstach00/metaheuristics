@@ -16,21 +16,21 @@ import java.nio.file.Paths;
 public class Logger {
     private static String logDirectory = Utils.getLogsPath;
 
-    public static void logger(CsvRecord csvRecord) {
-        String fullPath = logDirectory + "/" + csvRecord.getFileName();
+    public static void logger(CsvRecordEA csvRecordEA) {
+        String fullPath = logDirectory + "/" + csvRecordEA.getFileName();
         File file = new File(fullPath);
 
         boolean addHeader = !file.exists();
 
         try (var writer = new BufferedWriter(new FileWriter(file, true))) {
             if (addHeader)
-                writer.write(csvRecord.getHeader());
+                writer.write(csvRecordEA.getHeader());
 
-            StatefulBeanToCsv<CsvRecord> csv = new StatefulBeanToCsvBuilder<CsvRecord>(writer)
+            StatefulBeanToCsv<CsvRecordEA> csv = new StatefulBeanToCsvBuilder<CsvRecordEA>(writer)
                     .withApplyQuotesToAll(false)
                     .withOrderedResults(false)
                     .build();
-            csv.write(csvRecord);
+            csv.write(csvRecordEA);
         } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
             throw new RuntimeException(e);
         }

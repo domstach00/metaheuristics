@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.config.ConfigEA;
 import org.example.evaluator.IEvaluator;
 import org.example.initialization.IInitialization;
-import org.example.initialization.InitializationGreedy;
 import org.example.itemselector.IItemSelector;
-import org.example.itemselector.ItemSelectorPriceAndWeight;
 import org.example.loader.LoaderTTP;
 import org.example.logs.Analysis;
-import org.example.logs.CsvRecord;
+import org.example.logs.CsvRecordEA;
 import org.example.logs.Logger;
 import org.example.model.DataTTP;
 import org.example.model.Specimen;
@@ -95,6 +93,7 @@ public class WorkFlow {
             newPopulation = runIteration(newPopulation);
             currentPopulation = newPopulation;
             log(newPopulation);
+            System.out.println(currentIteration);
             currentIteration++;
         }
         finish();
@@ -151,8 +150,8 @@ public class WorkFlow {
     }
 
     private void log(ArrayList<Specimen> pop) {
-        CsvRecord csvRecord = new CsvRecord(this.currentIteration, pop);
-        Logger.log(csvRecord);
+        CsvRecordEA csvRecordEA = new CsvRecordEA(this.currentIteration, pop);
+        Logger.log(csvRecordEA);
     }
 
     private void logCurrentPopulation() {

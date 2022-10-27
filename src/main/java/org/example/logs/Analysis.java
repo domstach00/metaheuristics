@@ -28,16 +28,16 @@ public class Analysis implements ICsvRecord{
     }
 
     public void fetchDataFromGlobalCsvRecord() {
-        bestScore = CsvRecord.getGlobalBestScore();
-        worstScore = CsvRecord.getGlobalWorstScore();
+        bestScore = CsvRecordEA.getGlobalBestScore();
+        worstScore = CsvRecordEA.getGlobalWorstScore();
 
-        ArrayList<Double> avgList = CsvRecord.globalAverageScoreList;
+        ArrayList<Double> avgList = CsvRecordEA.globalAverageScoreList;
         avgScore = avgList.stream()
                 .mapToDouble(Double::doubleValue)
                 .average()
                 .orElseThrow();
 
-        std = calcStd(CsvRecord.globalAverageScoreList);
+        std = calcStd(CsvRecordEA.globalAverageScoreList);
     }
 
     public void analysisPopulation(ArrayList<Specimen> population) {

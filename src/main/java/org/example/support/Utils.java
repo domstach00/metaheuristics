@@ -1,6 +1,7 @@
 package org.example.support;
 
 import org.example.config.ConfigEA;
+import org.example.config.ConfigTS;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -8,6 +9,10 @@ public class Utils {
 
     public static ConfigEA getSuggestedConfigEA() {
         return new ConfigEA(100, 100, 0.7, 0.1, 5);
+    }
+
+    public static ConfigTS getSuggestedConfigTS() {
+        return new ConfigTS(1000, 10, 100);
     }
 
     public static int[] getStartAndFinishValues(int maxValueExcluded) {
@@ -35,7 +40,7 @@ public class Utils {
         return inputFileName.substring(0, inputFileName.lastIndexOf('.'));
     }
 
-    public static final String getLogsPath = "src/main/resources/logs";
+    public static final String getLogsPath = "src/main/resources/logs/swapts";
 
 
 }
