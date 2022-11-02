@@ -71,6 +71,12 @@ public class Specimen implements ISpecimen {
         initialization.startInitializationItems(itemSelector, this);
     }
 
+    public void initNewItems(IItemSelector itemSelector) {
+        this.knapsack = new ArrayList<>();
+        this.currentKnapsackWeight = 0;
+        itemSelector.select(this);
+    }
+
     @Override
     public void eval(IEvaluator evaluator) {
         fitness = evaluator.evaluateSpecimen(this);

@@ -1,25 +1,35 @@
 package org.example;
 
 import org.example.evaluator.AnotherEvaluator;
-import org.example.evaluator.Evaluator;
-import org.example.initialization.InitializationGreedy;
 import org.example.initialization.InitializationRandom;
-import org.example.itemselector.ItemSelectorPrice;
 import org.example.itemselector.ItemSelectorPriceAndWeight;
 import org.example.model.DataTTP;
-import org.example.operators.crossover.CrossoverCycle;
-import org.example.operators.crossover.CrossoverOrdered;
 import org.example.operators.crossover.CrossoverPartiallyMatched;
-import org.example.operators.mutation.MutationInversion;
 import org.example.operators.mutation.MutationSwap;
 import org.example.operators.mutation.MutationSwapTS;
 import org.example.operators.selection.SelectionRoulette;
-import org.example.operators.selection.SelectionTournament;
 import org.example.support.Utils;
 
 
 public class Main {
     public static void main(String[] args) {
+        long startTime = System.nanoTime();
+        DataTTP dataTTP = new DataTTP();
+        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(
+                Utils.getSuggestedConfigSA(),
+                dataTTP,
+                new AnotherEvaluator(dataTTP),
+                new InitializationRandom(),
+                new ItemSelectorPriceAndWeight(),
+                new MutationSwapTS()
+        );
+        simulatedAnnealing.start();
+        long endTime = System.nanoTime();
+        long time = (endTime - startTime) / 1_000_000_000;
+        System.out.println("Time [s]: " + time);
+    }
+
+    public static void runTS() {
         DataTTP dataTTP = new DataTTP();
         TabuSearch tabuSearch = new TabuSearch(
                 Utils.getSuggestedConfigTS(),
@@ -30,8 +40,8 @@ public class Main {
                 new MutationSwapTS()
         );
         tabuSearch.start();
-
     }
+
     public static void runEA() {
         DataTTP dataTTP = new DataTTP();
         WorkFlow workFlow = new WorkFlow(
