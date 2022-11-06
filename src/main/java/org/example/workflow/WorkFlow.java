@@ -1,6 +1,7 @@
-package org.example;
+package org.example.workflow;
 
 import lombok.RequiredArgsConstructor;
+import org.example.config.Config;
 import org.example.config.ConfigEA;
 import org.example.evaluator.IEvaluator;
 import org.example.initialization.IInitialization;
@@ -18,11 +19,11 @@ import org.example.support.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
-public class WorkFlow {
-
+public class WorkFlow implements IWorkFLow {
     private final DataTTP dataTTP;
     private final ConfigEA configEA;
 
@@ -40,6 +41,17 @@ public class WorkFlow {
     public static ArrayList<Specimen> currentPopulation;
     public static Specimen bestSpecimen = null;
 
+    @Override
+    public Config getConfig() {
+        return configEA;
+    }
+
+    @Override
+    public String getAlgName() {
+        return "EA";
+    }
+
+    @Override
     public void start() {
         File file = new File(inputPath);
         LoaderTTP loaderTTP = new LoaderTTP(dataTTP);
@@ -65,9 +77,20 @@ public class WorkFlow {
 
             population.add(specimen);
         }
-        currentPopulation = population;
+        Integer[] spec1 = {7, 5, 0, 6, 1, 9, 3, 2, 8, 4};
+        Integer[] spec2 = {0, 5, 8, 9, 2, 3, 4, 6, 7, 1};
+        population.get(0).setNodeGenome(spec1);
+        population.get(1).setNodeGenome(spec2);
 
-        runIteration(population);
+
+        System.out.println(Arrays.toString(population.get(0).getNodeGenome()));
+        System.out.println(Arrays.toString(population.get(1).getNodeGenome()));
+        Specimen osobnik =  crossover.crossover(population.get(0), population.get(1));
+        Specimen osobnik2 = crossover.crossover(population.get(1), population.get(0));
+        System.out.println("After cross");
+        System.out.println(Arrays.toString(osobnik.getNodeGenome()));
+        System.out.println(Arrays.toString(osobnik2.getNodeGenome()));
+//        runIteration(population);
 
 
     }

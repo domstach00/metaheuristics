@@ -1,6 +1,7 @@
-package org.example;
+package org.example.workflow;
 
 import lombok.RequiredArgsConstructor;
+import org.example.config.Config;
 import org.example.config.ConfigSA;
 import org.example.evaluator.IEvaluator;
 import org.example.initialization.IInitialization;
@@ -18,7 +19,7 @@ import java.io.File;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
-public class SimulatedAnnealing {
+public class SimulatedAnnealing implements IWorkFLow {
 
     private final ConfigSA configSA;
     private final DataTTP dataTTP;
@@ -37,6 +38,17 @@ public class SimulatedAnnealing {
     private int currentIteration = 0;
 
 
+    @Override
+    public Config getConfig() {
+        return configSA;
+    }
+
+    @Override
+    public String getAlgName() {
+        return "SA";
+    }
+
+    @Override
     public void start() {
         File file = new File(Utils.getInputPath);
         LoaderTTP loaderTTP = new LoaderTTP(dataTTP);

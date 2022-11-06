@@ -1,9 +1,5 @@
 package org.example.logs;
 
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
-import com.opencsv.exceptions.CsvDataTypeMismatchException;
-import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.example.support.Utils;
 
 import java.io.BufferedWriter;
@@ -14,30 +10,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Logger {
-    private static String logDirectory = Utils.getLogsPath;
+    private static final String logDirectory = Utils.getLogsPath;
 
-    public static void logger(CsvRecordEA csvRecordEA) {
-        String fullPath = logDirectory + "/" + csvRecordEA.getFileName();
-        File file = new File(fullPath);
+    private static final boolean summaryLog = true;
+    private static final String summaryLogFileName = "common.csv";
 
-        boolean addHeader = !file.exists();
-
-        try (var writer = new BufferedWriter(new FileWriter(file, true))) {
-            if (addHeader)
-                writer.write(csvRecordEA.getHeader());
-
-            StatefulBeanToCsv<CsvRecordEA> csv = new StatefulBeanToCsvBuilder<CsvRecordEA>(writer)
-                    .withApplyQuotesToAll(false)
-                    .withOrderedResults(false)
-                    .build();
-            csv.write(csvRecordEA);
-        } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void log(ICsvRecord iCsvRecord) {
-        File file = new File(logDirectory + "/" + iCsvRecord.getFileName());
+    public static void log(ICsvRecord csvRecord) {
+        File file = new File(logDirectory + "/" + csvRecord.getFileName());
 
         boolean addHeader = !file.exists();
 
@@ -52,11 +31,17 @@ public class Logger {
         // Append to log file
         try (var writer = new BufferedWriter(new FileWriter(file, true))) {
             if (addHeader)
-                writer.write(iCsvRecord.getHeader());
-            writer.write(iCsvRecord.getLine().replace('.', ','));
+                writer.write(csvRecord.getHeader());
+            writer.write(csvRecord.getLine().replace('.', ','));
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
+    }
+
+    public static void logCommon(ICsvRecord csvRecord) {
+        
     }
 }

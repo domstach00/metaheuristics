@@ -45,6 +45,6 @@ public class CsvRecordSA implements ICsvRecord {
 
     @Override
     public String getFileName() {
-        return Utils.getInputFileNameNoExtension() + "-logger_" + Utils.getSuggestedConfigSA().getConfigSAFileName() + ".csv";
+        return Utils.getInputFileNameNoExtension() + "-logger_" + Utils.getUsedConfig().configToFileName() + ".csv";
     }
 }

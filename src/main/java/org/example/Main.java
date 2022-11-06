@@ -9,13 +9,31 @@ import org.example.operators.mutation.MutationSwap;
 import org.example.operators.mutation.MutationSwapTS;
 import org.example.operators.selection.SelectionRoulette;
 import org.example.support.Utils;
+import org.example.workflow.IWorkFLow;
+import org.example.workflow.SimulatedAnnealing;
+import org.example.workflow.TabuSearch;
+import org.example.workflow.WorkFlow;
 
 
 public class Main {
+
+    public static IWorkFLow workFlow;
+
+    public static String currentFile;
+
     public static void main(String[] args) {
         long startTime = System.nanoTime();
+
+        runSA();
+
+        long endTime = System.nanoTime();
+        long time = (endTime - startTime) / 1_000_000_000;
+        System.out.println("Time [s]: " + time);
+    }
+
+    public static void runSA() {
         DataTTP dataTTP = new DataTTP();
-        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(
+        workFlow = new SimulatedAnnealing(
                 Utils.getSuggestedConfigSA(),
                 dataTTP,
                 new AnotherEvaluator(dataTTP),
@@ -23,15 +41,12 @@ public class Main {
                 new ItemSelectorPriceAndWeight(),
                 new MutationSwapTS()
         );
-        simulatedAnnealing.start();
-        long endTime = System.nanoTime();
-        long time = (endTime - startTime) / 1_000_000_000;
-        System.out.println("Time [s]: " + time);
+        workFlow.start();
     }
 
     public static void runTS() {
         DataTTP dataTTP = new DataTTP();
-        TabuSearch tabuSearch = new TabuSearch(
+        workFlow = new TabuSearch(
                 Utils.getSuggestedConfigTS(),
                 dataTTP,
                 new AnotherEvaluator(dataTTP),
@@ -39,12 +54,12 @@ public class Main {
                 new ItemSelectorPriceAndWeight(),
                 new MutationSwapTS()
         );
-        tabuSearch.start();
+        workFlow.start();
     }
 
     public static void runEA() {
         DataTTP dataTTP = new DataTTP();
-        WorkFlow workFlow = new WorkFlow(
+        workFlow = new WorkFlow(
                 dataTTP,
                 Utils.getSuggestedConfigEA(),
                 new AnotherEvaluator(dataTTP),

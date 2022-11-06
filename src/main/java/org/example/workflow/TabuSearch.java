@@ -1,6 +1,7 @@
-package org.example;
+package org.example.workflow;
 
 import lombok.RequiredArgsConstructor;
+import org.example.config.Config;
 import org.example.config.ConfigTS;
 import org.example.evaluator.IEvaluator;
 import org.example.initialization.IInitialization;
@@ -19,7 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 @RequiredArgsConstructor
-public class TabuSearch {
+public class TabuSearch implements IWorkFLow {
 
     private final ConfigTS configTS;
     private final DataTTP dataTTP;
@@ -41,6 +42,17 @@ public class TabuSearch {
     private int currentIteration = 0;
 
 
+    @Override
+    public Config getConfig() {
+        return configTS;
+    }
+
+    @Override
+    public String getAlgName() {
+        return "TS";
+    }
+
+    @Override
     public void start() {
         tabu = new Tabu(configTS.getTabuSize());
 
