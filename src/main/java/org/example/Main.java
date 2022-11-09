@@ -1,73 +1,147 @@
 package org.example;
 
+import org.example.config.ConfigEA;
+import org.example.config.ConfigLog;
+import org.example.config.ConfigSA;
+import org.example.config.ConfigTS;
 import org.example.evaluator.AnotherEvaluator;
 import org.example.initialization.InitializationRandom;
 import org.example.itemselector.ItemSelectorPriceAndWeight;
 import org.example.model.DataTTP;
-import org.example.operators.crossover.CrossoverPartiallyMatched;
+import org.example.operators.crossover.CrossoverOrdered;
+import org.example.operators.crossover.ICrossover;
+import org.example.operators.mutation.IMutation;
 import org.example.operators.mutation.MutationSwap;
-import org.example.operators.mutation.MutationSwapTS;
+import org.example.operators.mutation.MutationSwapTSSA;
+import org.example.operators.selection.ISelection;
 import org.example.operators.selection.SelectionRoulette;
 import org.example.support.Utils;
-import org.example.workflow.IWorkFLow;
 import org.example.workflow.SimulatedAnnealing;
 import org.example.workflow.TabuSearch;
-import org.example.workflow.WorkFlow;
+import org.example.workflow.EvolutionaryAlgorithm;
 
 
 public class Main {
 
-    public static IWorkFLow workFlow;
-
-    public static String currentFile;
-
     public static void main(String[] args) {
         long startTime = System.nanoTime();
 
-        runSA();
+        new Thread(() ->
+            runSA(
+                    Utils.getSuggestedConfigSA(),
+                    new MutationSwapTSSA(),
+                    new ConfigLog("medium_1.ttp")
+            )
+        ).start();
+
+        new Thread(() ->
+                runTS(Utils.getSuggestedConfigTS(),
+                        new MutationSwapTSSA(),
+                        new ConfigLog("medium_1.ttp"))
+        ).start();
+
+        new Thread(() ->
+                runEA(
+                        Utils.getSuggestedConfigEA(),
+                        new CrossoverOrdered(),
+                        new MutationSwap(),
+                        new SelectionRoulette(),
+                        new ConfigLog("medium_1.ttp"))
+        ).start();
+
+        new Thread(() ->
+                runSA(
+                        Utils.getSuggestedConfigSA(),
+                        new MutationSwapTSSA(),
+                        new ConfigLog("medium_1.ttp")
+                )
+        ).start();
+
+        new Thread(() ->
+                runTS(Utils.getSuggestedConfigTS(),
+                        new MutationSwapTSSA(),
+                        new ConfigLog("medium_1.ttp"))
+        ).start();
+
+        new Thread(() ->
+                runEA(
+                        Utils.getSuggestedConfigEA(),
+                        new CrossoverOrdered(),
+                        new MutationSwap(),
+                        new SelectionRoulette(),
+                        new ConfigLog("medium_1.ttp"))
+        ).start();
+
+        new Thread(() ->
+                runSA(
+                        Utils.getSuggestedConfigSA(),
+                        new MutationSwapTSSA(),
+                        new ConfigLog("medium_1.ttp")
+                )
+        ).start();
+
+        new Thread(() ->
+                runTS(Utils.getSuggestedConfigTS(),
+                        new MutationSwapTSSA(),
+                        new ConfigLog("medium_1.ttp"))
+        ).start();
+
+        new Thread(() ->
+                runEA(
+                        Utils.getSuggestedConfigEA(),
+                        new CrossoverOrdered(),
+                        new MutationSwap(),
+                        new SelectionRoulette(),
+                        new ConfigLog("medium_1.ttp"))
+        ).start();
+
 
         long endTime = System.nanoTime();
         long time = (endTime - startTime) / 1_000_000_000;
         System.out.println("Time [s]: " + time);
     }
 
-    public static void runSA() {
+    public static void runSA(ConfigSA configSA, IMutation mutation, ConfigLog configLog) {
         DataTTP dataTTP = new DataTTP();
-        workFlow = new SimulatedAnnealing(
-                Utils.getSuggestedConfigSA(),
+        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(
+                configSA,
                 dataTTP,
                 new AnotherEvaluator(dataTTP),
                 new InitializationRandom(),
                 new ItemSelectorPriceAndWeight(),
-                new MutationSwapTS()
+                mutation,
+                configLog
         );
-        workFlow.start();
+        simulatedAnnealing.start();
     }
 
-    public static void runTS() {
+    public static void runTS(ConfigTS configTS, IMutation mutation, ConfigLog configLog) {
         DataTTP dataTTP = new DataTTP();
-        workFlow = new TabuSearch(
-                Utils.getSuggestedConfigTS(),
+        TabuSearch tabuSearch = new TabuSearch(
+                configTS,
                 dataTTP,
                 new AnotherEvaluator(dataTTP),
                 new InitializationRandom(),
                 new ItemSelectorPriceAndWeight(),
-                new MutationSwapTS()
+                mutation,
+                configLog
         );
-        workFlow.start();
+        tabuSearch.start();
     }
 
-    public static void runEA() {
+    public static void runEA(ConfigEA configEA, ICrossover crossover, IMutation mutation, ISelection selection, ConfigLog configLog) {
         DataTTP dataTTP = new DataTTP();
-        workFlow = new WorkFlow(
+        EvolutionaryAlgorithm evolutionaryAlgorithm = new EvolutionaryAlgorithm(
                 dataTTP,
-                Utils.getSuggestedConfigEA(),
+                configEA,
+                crossover,
+                mutation,
+                selection,
                 new AnotherEvaluator(dataTTP),
                 new InitializationRandom(),
                 new ItemSelectorPriceAndWeight(),
-                new CrossoverPartiallyMatched(),
-                new MutationSwap(),
-                new SelectionRoulette());
-        workFlow.start();
+                configLog
+        );
+        evolutionaryAlgorithm.start();
     }
 }

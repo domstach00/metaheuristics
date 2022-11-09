@@ -1,7 +1,9 @@
 package org.example.workflow;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.config.Config;
+import org.example.config.ConfigLog;
 import org.example.config.ConfigSA;
 import org.example.evaluator.IEvaluator;
 import org.example.initialization.IInitialization;
@@ -13,7 +15,6 @@ import org.example.model.DataTTP;
 import org.example.model.Specimen;
 import org.example.neighborhood.Neighborhood;
 import org.example.operators.mutation.IMutation;
-import org.example.support.Utils;
 
 import java.io.File;
 import java.util.concurrent.ThreadLocalRandom;
@@ -28,14 +29,18 @@ public class SimulatedAnnealing implements IWorkFLow {
     private final IInitialization initialization;
     private final IItemSelector itemSelector;
 
+    @Getter
     private final IMutation mutation;
 
     private Neighborhood neighborhood;
+
+    private final ConfigLog configLog;
 
     private Specimen bestSpecimen;
     private Specimen currentSpecimen;
 
     private int currentIteration = 0;
+
 
 
     @Override
@@ -49,8 +54,14 @@ public class SimulatedAnnealing implements IWorkFLow {
     }
 
     @Override
+    public String getOperationsToLogDir() {
+        return this.getMutation().getMutationName();
+    }
+
+    @Override
     public void start() {
-        File file = new File(Utils.getInputPath);
+        configLog.formatLogPath(getAlgName(), getOperationsToLogDir());
+        File file = new File(configLog.getInputPath());
         LoaderTTP loaderTTP = new LoaderTTP(dataTTP);
         loaderTTP.readAllProperties(file);
 
@@ -78,13 +89,13 @@ public class SimulatedAnnealing implements IWorkFLow {
     private void run() {
         double currentTemp = configSA.getStartTemp();
 
-        while (currentIteration < configSA.getIteration()) {
+        while (currentIteration < configSA.getIteration() && currentTemp > configSA.getEndTemp()) {
             runIteration(currentTemp);
             currentTemp *= configSA.getAnnealingRate();
 
             log();
             currentIteration++;
-            System.out.println("Iter: " + currentIteration + "\tTemp: " + currentTemp);
+            System.out.println(getAlgName() + ": Iter: " + currentIteration + "\tTemp: " + currentTemp);
         }
         finish();
     }
@@ -104,8 +115,8 @@ public class SimulatedAnnealing implements IWorkFLow {
     }
 
     private void log() {
-        CsvRecordSA csvRecordSA = new CsvRecordSA(currentIteration, bestSpecimen.getFitness(), currentSpecimen.getFitness());
-        Logger.log(csvRecordSA);
+        CsvRecordSA csvRecordSA = new CsvRecordSA(currentIteration, bestSpecimen.getFitness(), currentSpecimen.getFitness(), configSA, configLog);
+        Logger.log(csvRecordSA, configLog);
 
     }
 

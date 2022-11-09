@@ -5,7 +5,7 @@ import org.example.itemselector.ItemSelectorPriceAndWeight;
 import org.example.model.Specimen;
 import org.example.support.Utils;
 
-public class MutationSwapTS implements IMutation {
+public class MutationSwapTSSA implements IMutation {
 
     @Override
     public Specimen mutation(Specimen specimen, double probability) {

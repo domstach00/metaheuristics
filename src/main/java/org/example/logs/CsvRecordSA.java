@@ -1,24 +1,31 @@
 package org.example.logs;
 
 import com.opencsv.bean.CsvBindByPosition;
+import org.example.config.ConfigLog;
+import org.example.config.ConfigSA;
 import org.example.support.Utils;
 
 public class CsvRecordSA implements ICsvRecord {
     public static final String[] FIELDS_ORDER = {"iteracja", "najlepsza_ocena", "obecna_ocena"};
 
+    private final ConfigSA configSA;
+    private final ConfigLog configLog;
+
     @CsvBindByPosition(position = 0)
-    private int iteration;
+    private final int iteration;
 
     @CsvBindByPosition(position = 1)
-    private double bestScore;
+    private final double bestScore;
 
     @CsvBindByPosition(position = 2)
-    private double currentScore;
+    private final double currentScore;
 
-    public CsvRecordSA(int iteration, double bestScore, double currentScore) {
+    public CsvRecordSA(int iteration, double bestScore, double currentScore, ConfigSA configSA, ConfigLog configLog) {
         this.iteration = iteration;
         this.bestScore = bestScore;
         this.currentScore = currentScore;
+        this.configSA = configSA;
+        this.configLog = configLog;
     }
 
 
@@ -45,6 +52,6 @@ public class CsvRecordSA implements ICsvRecord {
 
     @Override
     public String getFileName() {
-        return Utils.getInputFileNameNoExtension() + "-logger_" + Utils.getUsedConfig().configToFileName() + ".csv";
+        return Utils.getInputFileNameNoExtension(configLog.getCurrentFileName()) + "-logger_" + configSA.configToFileName() + "_" + configLog.getUniDate() +".csv";
     }
 }

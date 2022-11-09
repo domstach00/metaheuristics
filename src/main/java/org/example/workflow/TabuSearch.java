@@ -1,7 +1,9 @@
 package org.example.workflow;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.config.Config;
+import org.example.config.ConfigLog;
 import org.example.config.ConfigTS;
 import org.example.evaluator.IEvaluator;
 import org.example.initialization.IInitialization;
@@ -13,7 +15,6 @@ import org.example.model.DataTTP;
 import org.example.model.Specimen;
 import org.example.neighborhood.Neighborhood;
 import org.example.operators.mutation.IMutation;
-import org.example.support.Utils;
 import org.example.tabulistmanager.Tabu;
 
 import java.io.File;
@@ -29,7 +30,10 @@ public class TabuSearch implements IWorkFLow {
     private final IInitialization initialization;
     private final IItemSelector itemSelector;
 
+    @Getter
     private final IMutation mutation;
+
+    private final ConfigLog configLog;
 
     private Neighborhood neighborhood;
 
@@ -53,10 +57,16 @@ public class TabuSearch implements IWorkFLow {
     }
 
     @Override
+    public String getOperationsToLogDir() {
+        return this.getMutation().getMutationName();
+    }
+
+    @Override
     public void start() {
+        configLog.formatLogPath(getAlgName(), getOperationsToLogDir());
         tabu = new Tabu(configTS.getTabuSize());
 
-        File file = new File(Utils.getInputPath);
+        File file = new File(configLog.getInputPath());
         LoaderTTP loaderTTP = new LoaderTTP(dataTTP);
         loaderTTP.readAllProperties(file);
 
@@ -72,14 +82,14 @@ public class TabuSearch implements IWorkFLow {
     public void startTest() {
         tabu = new Tabu(configTS.getTabuSize());
 
-        File file = new File(Utils.getInputPath);
+        File file = new File(configLog.getInputPath());
         LoaderTTP loaderTTP = new LoaderTTP(dataTTP);
         loaderTTP.readAllProperties(file);
 
         currentSpecimen = init(dataTTP);
         bestSpecimen = currentSpecimen;
 
-        log();
+//        log();
     }
 
     private Specimen init(DataTTP dataTTP) {
@@ -95,7 +105,7 @@ public class TabuSearch implements IWorkFLow {
         while (currentIteration < configTS.getIteration()) {
             runIteration();
 //            log();
-            System.out.println(currentIteration++);
+            System.out.println(getAlgName() + ": " + currentIteration++);
         }
         finish();
     }
@@ -130,8 +140,7 @@ public class TabuSearch implements IWorkFLow {
                 .average()
                 .orElseThrow();
 
-        CsvRecordTS csvRecordTS = new CsvRecordTS(currentIteration, bestSpecimen, bestNeighbor, worstNeighbor, avgNeighbor);
-        Logger.log(csvRecordTS);
+        log(bestNeighbor, worstNeighbor, avgNeighbor);
     }
 
     private void finish() {
@@ -139,13 +148,13 @@ public class TabuSearch implements IWorkFLow {
     }
 
     private void log() {
-        CsvRecordTS csvRecordTS = new CsvRecordTS(currentIteration, bestSpecimen, currentSpecimen, tabu);
-        Logger.log(csvRecordTS);
+        CsvRecordTS csvRecordTS = new CsvRecordTS(currentIteration, bestSpecimen, currentSpecimen, tabu, configTS, configLog);
+        Logger.log(csvRecordTS, configLog);
     }
 
-    private void log2() {
-        CsvRecordTS csvRecordTS = new CsvRecordTS(currentIteration, bestSpecimen, currentSpecimen, tabu);
-        Logger.log(csvRecordTS);
+    private void log(Specimen bestNeighbor, Specimen worstNeighbor, double avgNeighbor) {
+        CsvRecordTS csvRecordTS = new CsvRecordTS(currentIteration, bestSpecimen, bestNeighbor, worstNeighbor, avgNeighbor, configTS, configLog);
+        Logger.log(csvRecordTS, configLog);
     }
 
     private void logFinalAnalysis() {

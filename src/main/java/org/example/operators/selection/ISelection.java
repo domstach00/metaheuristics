@@ -6,4 +6,8 @@ import java.util.ArrayList;
 
 public interface ISelection {
     Specimen selection(ArrayList<Specimen> population, int n);
+
+    default String getSelectionName() {
+        return this.getClass().getSimpleName();
+    }
 }

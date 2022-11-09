@@ -1,8 +1,10 @@
 package org.example.workflow;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.config.Config;
 import org.example.config.ConfigEA;
+import org.example.config.ConfigLog;
 import org.example.evaluator.IEvaluator;
 import org.example.initialization.IInitialization;
 import org.example.itemselector.IItemSelector;
@@ -15,7 +17,6 @@ import org.example.model.Specimen;
 import org.example.operators.crossover.ICrossover;
 import org.example.operators.mutation.IMutation;
 import org.example.operators.selection.ISelection;
-import org.example.support.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,23 +24,25 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
-public class WorkFlow implements IWorkFLow {
+public class EvolutionaryAlgorithm implements IWorkFLow {
     private final DataTTP dataTTP;
     private final ConfigEA configEA;
 
+    @Getter
+    private final ICrossover crossover;
+    @Getter
+    private final IMutation mutation;
+    @Getter
+    private final ISelection selection;
     private final IEvaluator evaluator;
     private final IInitialization initialization;
     private final IItemSelector itemSelector;
-    private final ICrossover crossover;
-    private final IMutation mutation;
-    private final ISelection selection;
 
-    private static final String inputPath = Utils.getInputPath;
+    private final ConfigLog configLog;
 
     private int currentIteration = 0;
 
-    public static ArrayList<Specimen> currentPopulation;
-    public static Specimen bestSpecimen = null;
+    public ArrayList<Specimen> currentPopulation;
 
     @Override
     public Config getConfig() {
@@ -52,8 +55,14 @@ public class WorkFlow implements IWorkFLow {
     }
 
     @Override
+    public String getOperationsToLogDir() {
+        return this.mutation.getMutationName() + "/" + this.getCrossover().getCrossoverName() + "/" + this.selection.getSelectionName();
+    }
+
+    @Override
     public void start() {
-        File file = new File(inputPath);
+        configLog.formatLogPath(getAlgName(), getOperationsToLogDir());
+        File file = new File(configLog.getInputPath());
         LoaderTTP loaderTTP = new LoaderTTP(dataTTP);
         loaderTTP.readAllProperties(file);
 
@@ -64,7 +73,7 @@ public class WorkFlow implements IWorkFLow {
     }
 
     public void startTest() {
-        File file = new File(inputPath);
+        File file = new File(configLog.getInputPath());
         LoaderTTP loaderTTP = new LoaderTTP(dataTTP);
         loaderTTP.readAllProperties(file);
 
@@ -90,9 +99,6 @@ public class WorkFlow implements IWorkFLow {
         System.out.println("After cross");
         System.out.println(Arrays.toString(osobnik.getNodeGenome()));
         System.out.println(Arrays.toString(osobnik2.getNodeGenome()));
-//        runIteration(population);
-
-
     }
 
     private ArrayList<Specimen> initPopulation(DataTTP dataTTP) {
@@ -116,7 +122,7 @@ public class WorkFlow implements IWorkFLow {
             newPopulation = runIteration(newPopulation);
             currentPopulation = newPopulation;
             log(newPopulation);
-            System.out.println(currentIteration);
+            System.out.println(getAlgName() + ": " + currentIteration);
             currentIteration++;
         }
         finish();
@@ -169,12 +175,11 @@ public class WorkFlow implements IWorkFLow {
     }
 
     private void finish() {
-        logFinalAnalysis();
     }
 
     private void log(ArrayList<Specimen> pop) {
-        CsvRecordEA csvRecordEA = new CsvRecordEA(this.currentIteration, pop);
-        Logger.log(csvRecordEA);
+        CsvRecordEA csvRecordEA = new CsvRecordEA(this.currentIteration, pop, configEA, configLog);
+        Logger.log(csvRecordEA, configLog);
     }
 
     private void logCurrentPopulation() {
@@ -184,16 +189,8 @@ public class WorkFlow implements IWorkFLow {
     private void logFinalAnalysis() {
         Analysis analysis = new Analysis();
         analysis.fetchDataFromGlobalCsvRecord();
-        Logger.log(analysis);
+        Logger.log(analysis, configLog);
 
-    }
-
-    public static double getTotalFitenss() {
-        double value = 0;
-        for (Specimen specimen : currentPopulation) {
-            value += specimen.getFitness();
-        }
-        return value;
     }
 
 }

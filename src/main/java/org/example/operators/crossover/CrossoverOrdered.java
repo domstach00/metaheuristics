@@ -41,6 +41,4 @@ public class CrossoverOrdered implements ICrossover {
 
         return child;
     }
-
-
 }

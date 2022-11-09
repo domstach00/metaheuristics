@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import org.example.config.ConfigEA;
+import org.example.config.ConfigLog;
 import org.example.model.Specimen;
 import org.example.support.Utils;
 
@@ -35,7 +37,12 @@ public class CsvRecordEA implements ICsvRecord {
     @Getter
     private static double globalWorstScore = Double.MAX_VALUE;
 
-    public CsvRecordEA(int generationNr, ArrayList<Specimen> population) {
+    private ConfigEA configEA;
+    private ConfigLog configLog;
+
+    public CsvRecordEA(int generationNr, ArrayList<Specimen> population, ConfigEA configEA, ConfigLog configLog) {
+        this.configEA = configEA;
+        this.configLog = configLog;
         this.generationNr = generationNr;
         ArrayList<Double> fitnessList = new ArrayList<>();
         for (Specimen specimen: population){
@@ -81,11 +88,9 @@ public class CsvRecordEA implements ICsvRecord {
         );
     }
 
-
-
     @Override
     public String getFileName() {
-        return Utils.getInputFileNameNoExtension() + "-logger_" + Utils.getUsedConfig().configToFileName() + ".csv";
+        return Utils.getInputFileNameNoExtension(configLog.getCurrentFileName()) + "-logger_" + configEA.configToFileName() + "_" + configLog.getUniDate() + ".csv";
     }
 
 }
