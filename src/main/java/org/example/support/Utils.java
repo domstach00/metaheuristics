@@ -4,6 +4,7 @@ import org.example.config.ConfigEA;
 import org.example.config.ConfigSA;
 import org.example.config.ConfigTS;
 
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,6 +25,10 @@ public class Utils {
         return new ConfigSA(150_000, 10, 1_000_000, 1, 0.9999);
     }
 
+    public static String getCurrentWorkingDirectory() {
+        return Paths.get(".").toAbsolutePath().normalize().toString();
+    }
+
     public static int[] getStartAndFinishValues(int maxValueExcluded) {
         int indexToStart = ThreadLocalRandom.current().nextInt(maxValueExcluded);
         int indexToFinish = ThreadLocalRandom.current().nextInt(maxValueExcluded);
@@ -40,14 +45,6 @@ public class Utils {
 
         return new int[] {indexToStart, indexToFinish};
     }
-
-//    public static final String inputFileName = Main.currentFile;
-
-//    public static final String getInputPath = "src/main/resources/input/" + inputFileName;
-
-//    public static String getInputFileNameNoExtension() {
-//        return inputFileName.substring(0, inputFileName.lastIndexOf('.'));
-//    }
 
     public static String getInputFileNameNoExtension(String name) {
         return name.substring(0, name.lastIndexOf('.'));
@@ -72,9 +69,4 @@ public class Utils {
 
         return sb.toString();
     }
-
-//    public static final String getLogsPath = String.format("src/main/resources/logs/%s/%s/",
-//            Main.workFlow.getAlgName().toLowerCase(),
-//            Main.workFlow.getOperationsToLogDir()
-//    );
 }
