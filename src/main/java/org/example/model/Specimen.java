@@ -23,6 +23,7 @@ public class Specimen implements ISpecimen {
 
     @Setter
     private SexEnum sex;
+    @Setter
     private Integer age;
 
 

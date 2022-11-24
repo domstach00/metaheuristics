@@ -46,7 +46,9 @@ public class HybridEA implements IWorkFLow {
     public ArrayList<Specimen> currentPopulation;
 
     public final int maxAge;
-    private static int sexEnumIterator = 0;
+    private int sexEnumIterator = 0;
+
+    private Specimen bestSpecimen;
 
     @Override
     public Config getConfig() {
@@ -115,6 +117,9 @@ public class HybridEA implements IWorkFLow {
             specimen.eval(evaluator);
 
             population.add(specimen);
+
+            if (bestSpecimen == null || bestSpecimen.getFitness() < specimen.getFitness())
+                setBestSpecimen(specimen);
         }
         currentPopulation = population;
         return population;
@@ -125,8 +130,8 @@ public class HybridEA implements IWorkFLow {
         while (currentIteration <= configEA.getGen()) {
             newPopulation = runIteration(newPopulation);
             currentPopulation = newPopulation;
+            System.out.println(getAlgName() + ": " + currentIteration + " PopSize: " + currentPopulation.size());
             log(newPopulation);
-            System.out.println(getAlgName() + ": " + currentIteration);
             currentIteration++;
         }
         finish();
@@ -153,9 +158,9 @@ public class HybridEA implements IWorkFLow {
 //    }
 
     private ArrayList<Specimen> runIteration(ArrayList<Specimen> population) {
-        population.removeIf(specimen -> specimen.getAge() >= maxAge);
 
         ArrayList<Specimen> newPopulation = new ArrayList<>();
+        newPopulation.add(bestSpecimen);
 
         while (newPopulation.size() < configEA.getPopSize()) {
             double random = ThreadLocalRandom.current().nextDouble();
@@ -168,6 +173,7 @@ public class HybridEA implements IWorkFLow {
                 selected1 = crossover.crossover(selected1, selected2);
                 selected1.eval(evaluator);
                 selected1.setSex(SexEnum.values()[sexEnumIterator++ % SexEnum.values().length]);
+                selected1.setAge(0);
                 newPopulation.add(selected1);
             }
             selected1 = mutation.mutation(selected1, configEA.getPM());
@@ -183,6 +189,12 @@ public class HybridEA implements IWorkFLow {
                 newPopulation.add(selected2);
             }
         }
+
+        for (Specimen specimen : newPopulation)
+            if (specimen.getFitness() > bestSpecimen.getFitness())
+                setBestSpecimen(specimen);
+
+        newPopulation.removeIf(specimen -> specimen.getAge() >= maxAge);
         for (Specimen specimen : newPopulation)
             specimen.growUp();
 
@@ -206,5 +218,10 @@ public class HybridEA implements IWorkFLow {
         analysis.fetchDataFromGlobalCsvRecord();
         Logger.log(analysis, configLog);
 
+    }
+
+    private void setBestSpecimen(Specimen specimen) {
+        bestSpecimen = new Specimen(specimen);
+        bestSpecimen.setAge(0);
     }
 }

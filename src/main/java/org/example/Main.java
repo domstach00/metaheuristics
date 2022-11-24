@@ -135,6 +135,7 @@ public class Main {
 //        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.6).pM(0.01).tour(5).build());
 //        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.6).pM(0.01).tour(5).build());
 
+//        System.out.println("X");
 //        new Thread(() -> runEA(
 //                configEAList.get(0),
 //                new CrossoverOrdered(),
@@ -162,8 +163,8 @@ public class Main {
 
 
         ArrayList<ConfigEA> configEAList = new ArrayList<>();
-        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(50).build());
-        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(50).build());
+        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(10).build());
+        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(10).build());
 
 
         new Thread(() -> runHybEA(
@@ -172,17 +173,17 @@ public class Main {
                 new MutationSwap(),
                 new SelectionRoulette(),
                 new ConfigLog("hard_0.ttp"),
-                5000000
+                10
         )).start();
 
-        new Thread(() -> runHybEA(
-                configEAList.get(1),
-                new CrossoverOrdered(),
-                new MutationSwap(),
-                new SelectionTournament(),
-                new ConfigLog("hard_0.ttp"),
-                5000000
-        )).start();
+//        new Thread(() -> runHybEA(
+//                configEAList.get(1),
+//                new CrossoverOrdered(),
+//                new MutationSwap(),
+//                new SelectionTournament(),
+//                new ConfigLog("hard_0.ttp"),
+//                7
+//        )).start();
 
 //        for (ConfigEA configEA : configEAList)
 //            new Thread(() -> runHybEA(
