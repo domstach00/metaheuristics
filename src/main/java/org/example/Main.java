@@ -15,7 +15,9 @@ import org.example.operators.mutation.MutationSwap;
 import org.example.operators.mutation.MutationSwapTSSA;
 import org.example.operators.selection.ISelection;
 import org.example.operators.selection.SelectionRoulette;
+import org.example.operators.selection.SelectionTournament;
 import org.example.support.Utils;
+import org.example.workflow.HybridEA;
 import org.example.workflow.SimulatedAnnealing;
 import org.example.workflow.TabuSearch;
 import org.example.workflow.EvolutionaryAlgorithm;
@@ -110,7 +112,7 @@ public class Main {
 //            )).start();
 
 
-        ArrayList<ConfigEA> configEAList = new ArrayList<>();
+//        ArrayList<ConfigEA> configEAList = new ArrayList<>();
 //        configEAList.add(ConfigEA.builder().popSize(100).gen(100).pX(0.3).pM(0.01).tour(5).build());
 //        configEAList.add(ConfigEA.builder().popSize(100).gen(100).pX(0.4).pM(0.01).tour(5).build());
 //        configEAList.add(ConfigEA.builder().popSize(100).gen(100).pX(0.5).pM(0.01).tour(5).build());
@@ -128,16 +130,69 @@ public class Main {
 //        configEAList.add(ConfigEA.builder().popSize(100).gen(110).pX(0.3).pM(0.01).tour(5).build());
 //        configEAList.add(ConfigEA.builder().popSize(100).gen(90).pX(0.3).pM(0.01).tour(5).build());
 
-        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.6).pM(0.01).tour(5).build());
+//        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.6).pM(0.01).tour(50).build());
+//        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.6).pM(0.01).tour(10).build());
+//        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.6).pM(0.01).tour(5).build());
+//        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.6).pM(0.01).tour(5).build());
 
-        for (ConfigEA configEA : configEAList)
-            new Thread(() -> runEA(
-                    configEA,
-                    new CrossoverOrdered(),
-                    new MutationSwap(),
-                    new SelectionRoulette(),
-                    new ConfigLog("hard_1.ttp")
-            )).start();
+//        new Thread(() -> runEA(
+//                configEAList.get(0),
+//                new CrossoverOrdered(),
+//                new MutationSwap(),
+//                new SelectionRoulette(),
+//                new ConfigLog("hard_0.ttp")
+//        )).start();
+//
+//        new Thread(() -> runEA(
+//                configEAList.get(1),
+//                new CrossoverOrdered(),
+//                new MutationSwap(),
+//                new SelectionRoulette(),
+//                new ConfigLog("hard_0.ttp")
+//        )).start();
+
+//        for (ConfigEA configEA : configEAList)
+//            new Thread(() -> runEA(
+//                    configEA,
+//                    new CrossoverOrdered(),
+//                    new MutationSwap(),
+//                    new SelectionRoulette(),
+//                    new ConfigLog("hard_0.ttp")
+//            )).start();
+
+
+        ArrayList<ConfigEA> configEAList = new ArrayList<>();
+        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(50).build());
+        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(50).build());
+
+
+        new Thread(() -> runHybEA(
+                configEAList.get(0),
+                new CrossoverOrdered(),
+                new MutationSwap(),
+                new SelectionRoulette(),
+                new ConfigLog("hard_0.ttp"),
+                5000000
+        )).start();
+
+        new Thread(() -> runHybEA(
+                configEAList.get(1),
+                new CrossoverOrdered(),
+                new MutationSwap(),
+                new SelectionTournament(),
+                new ConfigLog("hard_0.ttp"),
+                5000000
+        )).start();
+
+//        for (ConfigEA configEA : configEAList)
+//            new Thread(() -> runHybEA(
+//                    configEA,
+//                    new CrossoverOrdered(),
+//                    new MutationSwap(),
+//                    new SelectionRoulette(),
+//                    new ConfigLog("hard_0.ttp"),
+//                    5
+//            )).start();
     }
 
     public static void runSA(ConfigSA configSA, IMutation mutation, ConfigLog configLog) {
@@ -180,6 +235,23 @@ public class Main {
                 new InitializationRandom(),
                 new ItemSelectorPriceAndWeight(),
                 configLog
+        );
+        evolutionaryAlgorithm.start();
+    }
+
+    public static void runHybEA(ConfigEA configEA, ICrossover crossover, IMutation mutation, ISelection selection, ConfigLog configLog, int maxAge) {
+        DataTTP dataTTP = new DataTTP();
+        HybridEA evolutionaryAlgorithm = new HybridEA(
+                dataTTP,
+                configEA,
+                crossover,
+                mutation,
+                selection,
+                new AnotherEvaluator(dataTTP),
+                new InitializationRandom(),
+                new ItemSelectorPriceAndWeight(),
+                configLog,
+                maxAge
         );
         evolutionaryAlgorithm.start();
     }

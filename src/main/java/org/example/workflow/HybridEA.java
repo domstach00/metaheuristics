@@ -13,6 +13,7 @@ import org.example.logs.Analysis;
 import org.example.logs.CsvRecordEA;
 import org.example.logs.Logger;
 import org.example.model.DataTTP;
+import org.example.model.SexEnum;
 import org.example.model.Specimen;
 import org.example.operators.crossover.ICrossover;
 import org.example.operators.mutation.IMutation;
@@ -24,7 +25,7 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
-public class EvolutionaryAlgorithm implements IWorkFLow {
+public class HybridEA implements IWorkFLow {
     private final DataTTP dataTTP;
     private final ConfigEA configEA;
 
@@ -44,6 +45,9 @@ public class EvolutionaryAlgorithm implements IWorkFLow {
 
     public ArrayList<Specimen> currentPopulation;
 
+    public final int maxAge;
+    private static int sexEnumIterator = 0;
+
     @Override
     public Config getConfig() {
         return configEA;
@@ -51,7 +55,7 @@ public class EvolutionaryAlgorithm implements IWorkFLow {
 
     @Override
     public String getAlgName() {
-        return "EA";
+        return "HybEA";
     }
 
     @Override
@@ -105,7 +109,7 @@ public class EvolutionaryAlgorithm implements IWorkFLow {
         ArrayList<Specimen> population = new ArrayList<>(configEA.getPopSize());
 
         for (int i = 0; i < configEA.getPopSize(); i++) {
-            Specimen specimen = new Specimen(dataTTP);
+            Specimen specimen = new Specimen(dataTTP, ThreadLocalRandom.current().nextInt(maxAge));
 
             specimen.init(initialization, itemSelector);
             specimen.eval(evaluator);
@@ -149,31 +153,39 @@ public class EvolutionaryAlgorithm implements IWorkFLow {
 //    }
 
     private ArrayList<Specimen> runIteration(ArrayList<Specimen> population) {
+        population.removeIf(specimen -> specimen.getAge() >= maxAge);
+
         ArrayList<Specimen> newPopulation = new ArrayList<>();
 
         while (newPopulation.size() < configEA.getPopSize()) {
             double random = ThreadLocalRandom.current().nextDouble();
             Specimen selected1 = selection.selection(population, configEA.getTour());
             Specimen selected2 = selection.selection(population, configEA.getTour());
-            while (selected1 == selected2)
+            while (selected1 == selected2 || selected1.getSex() == selected2.getSex())
                 selected2 = selection.selection(population, configEA.getTour());
 
             if (random <= configEA.getPX()) {
                 selected1 = crossover.crossover(selected1, selected2);
                 selected1.eval(evaluator);
+                selected1.setSex(SexEnum.values()[sexEnumIterator++ % SexEnum.values().length]);
                 newPopulation.add(selected1);
             }
             selected1 = mutation.mutation(selected1, configEA.getPM());
             selected1.initNewItems(initialization, itemSelector);
             selected1.eval(evaluator);
+            selected1.setSex(SexEnum.values()[sexEnumIterator++ % SexEnum.values().length]);
             newPopulation.add(selected1);
             if (newPopulation.size() < configEA.getPopSize()) {
                 selected2 = mutation.mutation(selected2, configEA.getPM());
                 selected2.initNewItems(initialization, itemSelector);
                 selected2.eval(evaluator);
+                selected2.setSex(SexEnum.values()[sexEnumIterator++ % SexEnum.values().length]);
                 newPopulation.add(selected2);
             }
         }
+        for (Specimen specimen : newPopulation)
+            specimen.growUp();
+
         return newPopulation;
     }
 
@@ -195,5 +207,4 @@ public class EvolutionaryAlgorithm implements IWorkFLow {
         Logger.log(analysis, configLog);
 
     }
-
 }

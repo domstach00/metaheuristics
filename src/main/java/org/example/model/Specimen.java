@@ -8,6 +8,7 @@ import org.example.initialization.IInitialization;
 import org.example.itemselector.IItemSelector;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
 @ToString
@@ -20,12 +21,36 @@ public class Specimen implements ISpecimen {
     private int currentKnapsackWeight;
     private ArrayList<ItemTTP> knapsack;
 
+    @Setter
+    private SexEnum sex;
+    private Integer age;
+
 
     public Specimen(DataTTP config) {
         this.dataTTP = config;
-        nodeGenome = new Integer[dataTTP.getNodes().size()];
-        knapsack = new ArrayList<>();
-        currentKnapsackWeight = 0;
+        this.nodeGenome = new Integer[dataTTP.getNodes().size()];
+        this.knapsack = new ArrayList<>();
+        this.currentKnapsackWeight = 0;
+        this.age = 0;
+        this.sex = SexEnum.values()[ThreadLocalRandom.current().nextInt(SexEnum.values().length)];
+    }
+
+    public Specimen(DataTTP config, int startAge) {
+        this.dataTTP = config;
+        this.nodeGenome = new Integer[dataTTP.getNodes().size()];
+        this.knapsack = new ArrayList<>();
+        this.currentKnapsackWeight = 0;
+        this.age = startAge;
+        this.sex = SexEnum.values()[ThreadLocalRandom.current().nextInt(SexEnum.values().length)];
+    }
+
+    public Specimen(DataTTP config, SexEnum sexEnum) {
+        this.dataTTP = config;
+        this.nodeGenome = new Integer[dataTTP.getNodes().size()];
+        this.knapsack = new ArrayList<>();
+        this.currentKnapsackWeight = 0;
+        this.age = 0;
+        this.sex = sexEnum;
     }
 
     public Specimen(Specimen other) {
@@ -34,6 +59,8 @@ public class Specimen implements ISpecimen {
         this.nodeGenome = other.nodeGenome.clone();
         this.currentKnapsackWeight = other.currentKnapsackWeight;
         this.knapsack = (ArrayList<ItemTTP>) other.knapsack.clone();
+        this.age = other.age;
+        this.sex = other.sex;
     }
 
     public boolean addToKnapsack(ItemTTP itemTTP) {
@@ -85,5 +112,9 @@ public class Specimen implements ISpecimen {
     @Override
     public void fix() {
 
+    }
+
+    public void growUp() {
+        age++;
     }
 }
