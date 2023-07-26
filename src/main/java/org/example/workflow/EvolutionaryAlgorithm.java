@@ -152,13 +152,12 @@ public class EvolutionaryAlgorithm implements IWorkFLow {
         ArrayList<Specimen> newPopulation = new ArrayList<>();
 
         while (newPopulation.size() < configEA.getPopSize()) {
-            double random = ThreadLocalRandom.current().nextDouble();
             Specimen selected1 = selection.selection(population, configEA.getTour());
             Specimen selected2 = selection.selection(population, configEA.getTour());
             while (selected1 == selected2)
                 selected2 = selection.selection(population, configEA.getTour());
 
-            if (random <= configEA.getPX()) {
+            if (ThreadLocalRandom.current().nextDouble() <= configEA.getPX()) {
                 selected1 = crossover.crossover(selected1, selected2);
                 selected1.eval(evaluator);
                 newPopulation.add(selected1);

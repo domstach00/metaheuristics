@@ -1,5 +1,6 @@
 package org.example.evaluator;
 
+import lombok.RequiredArgsConstructor;
 import org.example.model.DataTTP;
 import org.example.model.ItemTTP;
 import org.example.model.NodeTTP;
@@ -7,13 +8,10 @@ import org.example.model.Specimen;
 
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class AnotherEvaluator implements IEvaluator {
 
     private final DataTTP dataTTP;
-
-    public AnotherEvaluator(DataTTP dataTTP) {
-        this.dataTTP = dataTTP;
-    }
 
     @Override
     public Double evaluateSpecimen(Specimen specimen) {

@@ -14,17 +14,17 @@ import java.util.concurrent.ThreadLocalRandom;
 @ToString
 public class Specimen implements ISpecimen {
     @ToString.Exclude
-    private final DataTTP dataTTP;
+    protected final DataTTP dataTTP;
     @Setter
-    private Integer[] nodeGenome;
-    private double fitness;
-    private int currentKnapsackWeight;
-    private ArrayList<ItemTTP> knapsack;
+    protected Integer[] nodeGenome;
+    protected double fitness;
+    protected int currentKnapsackWeight;
+    protected ArrayList<ItemTTP> knapsack;
 
-    @Setter
-    private SexEnum sex;
-    @Setter
-    private Integer age;
+//    @Setter
+//    private SexEnum sex;
+//    @Setter
+//    private Integer age;
 
 
     public Specimen(DataTTP config) {
@@ -32,8 +32,8 @@ public class Specimen implements ISpecimen {
         this.nodeGenome = new Integer[dataTTP.getNodes().size()];
         this.knapsack = new ArrayList<>();
         this.currentKnapsackWeight = 0;
-        this.age = 0;
-        this.sex = SexEnum.values()[ThreadLocalRandom.current().nextInt(SexEnum.values().length)];
+//        this.age = 0;
+//        this.sex = SexEnum.values()[ThreadLocalRandom.current().nextInt(SexEnum.values().length)];
     }
 
     public Specimen(DataTTP config, int startAge) {
@@ -41,17 +41,8 @@ public class Specimen implements ISpecimen {
         this.nodeGenome = new Integer[dataTTP.getNodes().size()];
         this.knapsack = new ArrayList<>();
         this.currentKnapsackWeight = 0;
-        this.age = startAge;
-        this.sex = SexEnum.values()[ThreadLocalRandom.current().nextInt(SexEnum.values().length)];
-    }
-
-    public Specimen(DataTTP config, SexEnum sexEnum) {
-        this.dataTTP = config;
-        this.nodeGenome = new Integer[dataTTP.getNodes().size()];
-        this.knapsack = new ArrayList<>();
-        this.currentKnapsackWeight = 0;
-        this.age = 0;
-        this.sex = sexEnum;
+//        this.age = startAge;
+//        this.sex = SexEnum.values()[ThreadLocalRandom.current().nextInt(SexEnum.values().length)];
     }
 
     public Specimen(Specimen other) {
@@ -60,8 +51,8 @@ public class Specimen implements ISpecimen {
         this.nodeGenome = other.nodeGenome.clone();
         this.currentKnapsackWeight = other.currentKnapsackWeight;
         this.knapsack = (ArrayList<ItemTTP>) other.knapsack.clone();
-        this.age = other.age;
-        this.sex = other.sex;
+//        this.age = other.age;
+//        this.sex = other.sex;
     }
 
     public boolean addToKnapsack(ItemTTP itemTTP) {
@@ -110,12 +101,14 @@ public class Specimen implements ISpecimen {
         fitness = evaluator.evaluateSpecimen(this);
     }
 
-    @Override
-    public void fix() {
-
+    public Specimen clone() {
+        return new Specimen(this);
     }
 
-    public void growUp() {
-        age++;
-    }
+
+//    public void growUp() {
+//        age++;
+//    }
+
 }
+

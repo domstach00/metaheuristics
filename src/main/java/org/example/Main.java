@@ -1,9 +1,6 @@
 package org.example;
 
-import org.example.config.ConfigEA;
-import org.example.config.ConfigLog;
-import org.example.config.ConfigSA;
-import org.example.config.ConfigTS;
+import org.example.config.*;
 import org.example.evaluator.AnotherEvaluator;
 import org.example.initialization.InitializationRandom;
 import org.example.itemselector.ItemSelectorPriceAndWeight;
@@ -15,7 +12,6 @@ import org.example.operators.mutation.MutationSwap;
 import org.example.operators.mutation.MutationSwapTSSA;
 import org.example.operators.selection.ISelection;
 import org.example.operators.selection.SelectionRoulette;
-import org.example.operators.selection.SelectionTournament;
 import org.example.support.Utils;
 import org.example.workflow.HybridEA;
 import org.example.workflow.SimulatedAnnealing;
@@ -24,6 +20,8 @@ import org.example.workflow.EvolutionaryAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 
 public class Main {
@@ -60,7 +58,7 @@ public class Main {
                 break;
 
             default:
-                run();
+                threadPoolExec();
         }
 
 
@@ -162,38 +160,40 @@ public class Main {
 //            )).start();
 
 
-        ArrayList<ConfigEA> configEAList = new ArrayList<>();
-        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(10).build());
-        configEAList.add(ConfigEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(10).build());
+        ArrayList<ConfigHybEA> configHybEAS = new ArrayList<>();
+        configHybEAS.add(ConfigHybEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(10).maxAge(5).build());
+        configHybEAS.add(ConfigHybEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(10).maxAge(10).build());
+        configHybEAS.add(ConfigHybEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(10).maxAge(15).build());
+        configHybEAS.add(ConfigHybEA.builder().popSize(100).gen(5000).pX(0.3).pM(0.01).tour(10).maxAge(20).build());
 
 
-        new Thread(() -> runHybEA(
-                configEAList.get(0),
-                new CrossoverOrdered(),
-                new MutationSwap(),
-                new SelectionRoulette(),
-                new ConfigLog("hard_0.ttp"),
-                10
-        )).start();
+        for (ConfigHybEA configHybEA : configHybEAS)
+            new Thread(() -> runHybEA(
+                    configHybEA,
+                    new CrossoverOrdered(),
+                    new MutationSwap(),
+                    new SelectionRoulette(),
+                    new ConfigLog("hard_0.ttp")
+            )).start();
+    }
 
-//        new Thread(() -> runHybEA(
-//                configEAList.get(1),
-//                new CrossoverOrdered(),
-//                new MutationSwap(),
-//                new SelectionTournament(),
-//                new ConfigLog("hard_0.ttp"),
-//                7
-//        )).start();
+    public static void threadPoolExec() {
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
 
-//        for (ConfigEA configEA : configEAList)
-//            new Thread(() -> runHybEA(
-//                    configEA,
+        for (int i = 0; i < 1; i++) {
+            executor.submit(() -> runEA(
+                    Utils.getSuggestedConfigEA(),
+                    new CrossoverOrdered(),
+                    new MutationSwap(),
+                    new SelectionRoulette(),
+                    new ConfigLog("medium_0.ttp")));
+//            executor.submit(() -> runHybEA(
+//                    Utils.getSuggestedConfigHybridEA(),
 //                    new CrossoverOrdered(),
 //                    new MutationSwap(),
 //                    new SelectionRoulette(),
-//                    new ConfigLog("hard_0.ttp"),
-//                    5
-//            )).start();
+//                    new ConfigLog("medium_0.ttp")));
+        }
     }
 
     public static void runSA(ConfigSA configSA, IMutation mutation, ConfigLog configLog) {
@@ -240,19 +240,18 @@ public class Main {
         evolutionaryAlgorithm.start();
     }
 
-    public static void runHybEA(ConfigEA configEA, ICrossover crossover, IMutation mutation, ISelection selection, ConfigLog configLog, int maxAge) {
+    public static void runHybEA(ConfigHybEA configHybEA, ICrossover crossover, IMutation mutation, ISelection selection, ConfigLog configLog) {
         DataTTP dataTTP = new DataTTP();
         HybridEA evolutionaryAlgorithm = new HybridEA(
                 dataTTP,
-                configEA,
+                configHybEA,
                 crossover,
                 mutation,
                 selection,
                 new AnotherEvaluator(dataTTP),
                 new InitializationRandom(),
                 new ItemSelectorPriceAndWeight(),
-                configLog,
-                maxAge
+                configLog
         );
         evolutionaryAlgorithm.start();
     }

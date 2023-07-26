@@ -8,18 +8,16 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MutationInversion implements IMutation {
 
     @Override
-    public Specimen mutation(Specimen specimen, double probability) {
+    public <T extends Specimen> T mutation(T specimen, double probability) {
         if (ThreadLocalRandom.current().nextDouble() > probability)
             return specimen;
 
-        Specimen newSpecimen = new Specimen(specimen);
+        T newSpecimen = (T) specimen.clone();
         int[] startAndEnd = Utils.getStartAndFinishValues(newSpecimen.getNodeGenome().length);
         int indexToStart = startAndEnd[0];
         int indexToFinish = startAndEnd[1];
 
-
         inverse(newSpecimen.getNodeGenome(), indexToStart, indexToFinish);
-
 
         return newSpecimen;
     }
@@ -39,4 +37,19 @@ public class MutationInversion implements IMutation {
         if (endIndex - startIndex >= 0)
             System.arraycopy(genomeInverse, startIndex, genome, startIndex, endIndex - startIndex);
     }
+
+//    @Override
+//    public Specimen mutation(Specimen specimen, double probability) {
+//        if (ThreadLocalRandom.current().nextDouble() > probability)
+//            return specimen;
+//
+//        Specimen newSpecimen = new Specimen(specimen);
+//        int[] startAndEnd = Utils.getStartAndFinishValues(newSpecimen.getNodeGenome().length);
+//        int indexToStart = startAndEnd[0];
+//        int indexToFinish = startAndEnd[1];
+//
+//        inverse(newSpecimen.getNodeGenome(), indexToStart, indexToFinish);
+//
+//        return newSpecimen;
+//    }
 }

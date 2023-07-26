@@ -5,7 +5,8 @@ import org.example.model.Specimen;
 import java.util.ArrayList;
 
 public interface ISelection {
-    Specimen selection(ArrayList<Specimen> population, int n);
+    <T extends Specimen> T selection(ArrayList<T> population, int n);
+//    Specimen selection(ArrayList<Specimen> population, int n);
 
     default String getSelectionName() {
         return this.getClass().getSimpleName();

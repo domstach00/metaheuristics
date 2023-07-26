@@ -1,6 +1,7 @@
 package org.example.support;
 
 import org.example.config.ConfigEA;
+import org.example.config.ConfigHybEA;
 import org.example.config.ConfigSA;
 import org.example.config.ConfigTS;
 
@@ -14,7 +15,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Utils {
 
     public static ConfigEA getSuggestedConfigEA() {
-        return new ConfigEA(100, 100, 0.3, 0.01, 5);
+        return new ConfigEA(100, 5000, 0.6, 0.01, 10);
+    }
+
+    public static ConfigHybEA getSuggestedConfigHybridEA() {
+        return new ConfigHybEA(100, 5000, 0.7, 0.01, 10, 15);
     }
 
     public static ConfigTS getSuggestedConfigTS() {
